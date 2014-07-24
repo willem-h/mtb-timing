@@ -1,0 +1,13 @@
+{
+  "version": "0.1.0",
+  "name": "mtb-timing",
+  "description": "Making timing for mountain bike events simple and easy",
+  "author": "Willem Handreck <whreck1972@live.com>",
+  "dependencies": {
+    "express.io": "^1.1.13",
+    "mongoose": "^3.8.13"
+  },
+  "engines": {
+    "node": "0.10.x"
+  }
+}
