@@ -4,6 +4,7 @@
 	<title>MTB Timing</title>
 
 	<link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="includes/css/style.css">
 </head>
 <body>
 	<nav class="navbar navbar-default" role="navigation">
@@ -26,18 +27,66 @@
 				<li><a href="./countdown.html">Countdown</a></li>
 				<li><a href="./results.html">Results</a></li>
 			</ul>
+			<p class="navbar-text navbar-right noti notiSuccess"></p>
 			</div><!-- /.navbar-collapse -->
 		</div><!-- /.container-fluid -->
 	</nav>
 
+	<div id="content" class="col-lg-10 col-lg-offset-1">
+		<div id="raceControl" class="col-lg-6">
+			<form role="form" id="riderNumForm">
+				<div class="form-group">
+					<label for="riderNum" hidden>Start Rider</label>
+					<input type="number" class="form-control" id="riderNum" placeholder="Start Rider..." style="line-height:60px; height:70px; font-size:50px; text-align:center;" autofocus>
+				</div>
+				<button type="submit" class="btn btn-default" style="display:none">Submit</button>
+			</form>
 
-	<div id="content" class="col-lg-10">
-		<div id="raceControl">
-
+			<h3 style="margin-top:100px;">New Rider</h3>
+			<form role="form" id="newRider">
+				<div class="form-group">
+					<label for="newName">Name</label>
+					<input type="text" class="form-control" id="newName">
+				</div>
+				<div class="form-group">
+					<label for="newNum">Number</label>
+					<input type="number" class="form-control" id="newNum">
+				</div>
+				<div class="form-group">
+					<label for="newCat">Category</label>
+					<input type="text" class="form-control" id="newCat">
+				</div>
+				<button type="submit" class="btn btn-primary pull-right">Add Rider</button>
+				<button type="button" class="btn btn-default pull-right" id="cancelNewRider" style="margin-right:10px;">Cancel</button>
+			</form>
 		</div>
-		<div id="currentRiders">
-
+		<div id="currentRiders" class="col-lg-6">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Number</th>
+						<th>Name</th>
+						<th>Category</th>
+						<th>Time</th>
+						<th>ETA</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Willem Handreck</td>
+						<td>Under 18s</td>
+						<td>3:45</td>
+						<td>10:03</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
+
+	<script src="includes/js/jquery.js"></script>
+	<script src="includes/js/socket.io.js"></script>
+	<script src="includes/js/socket.js"></script>
+	<script src="includes/js/script.js"></script>
 </body>
 </html>

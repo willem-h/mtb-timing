@@ -1,18 +1,30 @@
-var express = require('express.io');
+// Setup requires
+var express = require('express');
 var app = express();
-app.http().io();
+var server = require('http').createServer(app);
+var io = require('socket.io');
+io = io(server);
+// var fs = require("fs");
+
+// Make Express be server
 app.use(express.static(__dirname + '/static'));
 
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/mtb');
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function callback () {
-	console.log("everything is happy!");
+io.on('connection', function(socket){
+	console.log("A user connected");
+
+	socket.emit('message', 'Server is working');
+
+    socket.on('disconnect', function(){
+        console.log("A user disconnected");
+    });
 });
 
-app.io.route('ready', function(socket){
-    console.log(socket);
-});
+// fs.readFile('/etc/hostname', function (err, data) {
+//   if (err) throw err;
+//   console.log(data);
+// });
 
-app.listen(80);
+var port = Number(process.env.PORT || 5000);
+server.listen(port, function(){
+    console.log("Listening on "+ port);
+});

@@ -4,10 +4,30 @@
   "description": "Making timing for mountain bike events simple and easy",
   "author": "Willem Handreck <whreck1972@live.com>",
   "dependencies": {
-    "express.io": "^1.1.13",
-    "mongoose": "^3.8.13"
+    "express": "^4.7.2",
+    "socket.io": "^1.0.6"
   },
   "engines": {
     "node": "0.10.x"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/willem-h/mtb-timing.git"
+  },
+  "keywords": [
+    "mtb",
+    "timing",
+    "competition",
+    "timing",
+    "node",
+    "nodejs"
+  ],
+  "bugs": {
+    "url": "https://github.com/willem-h/mtb-timing/issues"
   }
 }
