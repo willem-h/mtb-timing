@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>Countdown | MTB</title>
 
-    <link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="includes/css/style.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
     <style>
         .go {
             background: #6cd800;
             color: white;
-            /*transition: background .25s ease-out-in;*/
-           /*-moz-transition: background .25s ease-in-out;*/
-           -webkit-transition: background 1.5s ease-in-out;
+        }
+
+        .returnToNormal {
+            background: #ffffff;
+            -webkit-transition: background .5s ease-in-out;
+            /*-webkit-transition: color .5s ease-in-out;*/
+        }
+
+        .returnText {
+            color: #333;
+            -webkit-transition: color 1s ease-in-out;
         }
 
         #riderInfo h1 {
@@ -35,106 +44,39 @@
         }
 
         #countdown {
-            position: fixed;
-            top: 50%;
-            margin-top: -220px;
-            width: 100%;
+            position: relative;
+            margin-top: 19%;
         }
 
         #countdown h1 {
-            font-size: 450px;
+            font-size: 32vw;
+            text-align: center;
             line-height: 400px;
         }
     </style>
 </head>
-<body ng-app="countdown">
+<body ng-app="app">
     <div id="content" class="col-lg-10 col-lg-offset-1">
         <div id="riderInfo" ng-controller="riderInfo">
             <h1>{{ number }}</h1>
             <h1>{{ name }}</h1>
             <h1>{{ category }}</h1>
         </div>
-        <!-- <button id="start">Start</button>
-        <button id="stop">Stop</button>
-        <button id="reset">Reset</button> -->
+
         <div id="countdown" ng-controller="countCtrl">
-            <h1>
-                <span>{{ mins }}</span>:<span>{{ secs }}</span>
+            <h1 id="reset">
+                {{ mins }}:{{ secs }}
             </h1>
         </div>
     </div>
 
-    <script src="includes/js/jquery.js"></script>
-    <!-- <script src="includes/js/socket.io.js"></script>
-    <script src="includes/js/socket.js"></script>
-    <script src="includes/js/script.js"></script> -->
-
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
-    <script>
-        var app = angular.module('countdown', []);
-    </script>
-
-    <script>
-        app.controller('countCtrl', function($scope){
-            var time = 2;
-            var timer = null;
-            $scope.mins = addZeros(Math.floor(time/60));
-            $scope.secs = addZeros(time%60);
-
-            function addZeros(data) {
-                data = data.toString();
-                if (data.length == 1) {
-                    data = "0" + data;
-                }
-                return data;
-            }
-
-            function startTimer() {
-                timer = setInterval(function(){
-                    time--;
-                    $scope.mins = addZeros(Math.floor(time/60));
-                    $scope.secs = addZeros(time%60);
-                    $scope.$apply();
-                    if (time === 0) {
-                        $('body').toggleClass('go');
-                        clearInterval(timer);
-                        timer = null;
-                        setTimeout(function(){
-                            $('body').toggleClass('go');
-                        },3000);
-                    }
-                },1000);
-            }
-
-            // $('#start').click(function(){
-            //     if (timer === null) {
-            //         startTimer();
-            //     }
-            //     console.log("started");
-            // });
-            //
-            // $('#stop').click(function(){
-            //     clearInterval(timer);
-            //     timer = null;
-            // });
-            //
-            // $('#reset').click(function(){
-            //     clearInterval(timer);
-            //     timer = null;
-            //     time = 125;
-            //     $scope.mins = addZeros(Math.floor(time/60));
-            //     $scope.secs = addZeros(time%60);
-            //     $scope.$apply();
-            // });
-
-            startTimer();
-        });
-
-        app.controller('riderInfo', function($scope){
-            $scope.number = 1;
-            $scope.name = "John Smith";
-            $scope.category = "Under 18s";
-        });
-    </script>
+    <script src="js/angular.js"></script>
+    <script src="js/angular/app.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/socket.io.js"></script>
+    <script src="js/socket.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/angular/timerCtrl.js"></script>
+    <script src="js/angular/infoCtrl.js"></script>
 </body>
 </html>

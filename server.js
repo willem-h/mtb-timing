@@ -22,7 +22,6 @@ io.on('connection', function(socket){
 
 	socket.on('newRider', function(data){
 		riders.push(data);
-		// riders = riders + data;
 		fs.writeFile('includes/riderdb.txt', JSON.stringify(riders), function(err){
 			if (err) {
 				console.log(err);
