@@ -6,8 +6,9 @@
 
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
-<body>
+<body ng-app="app">
 	<nav class="navbar navbar-default" role="navigation">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
@@ -35,21 +36,23 @@
 
 	<div id="content" class="col-lg-10 col-lg-offset-1">
 		<div id="raceControl" class="col-lg-6">
-			<form role="form" id="riderNumForm">
-				<div class="form-group">
-					<label for="riderNum" hidden>Start Rider</label>
-					<input type="number" class="form-control" id="riderNum" placeholder="Start Rider..." style="line-height:60px; height:70px; font-size:50px; text-align:center;" autofocus>
+			<div  ng-controller="searchCtrl">
+				<form role="form" id="riderNumForm">
+					<div class="form-group">
+						<label for="riderNum" hidden>Start Rider</label>
+						<input type="number" class="form-control" id="riderNum" placeholder="Start Rider..." ng-model="input" ng-keyup="search.action" autofocus>
+					</div>
+					<button type="submit" class="btn btn-default" style="display:none">Submit</button>
+				</form>
+				<div class="col-lg-8 col-md-offset-2">
+					<table class="table">
+							<tr>
+								<td>{{ search.number }}</td>
+								<td>{{ search.name }}</td>
+								<td>{{ search.category }}</td>
+							</tr>
+					</table>
 				</div>
-				<button type="submit" class="btn btn-default" style="display:none">Submit</button>
-			</form>
-			<div class="col-lg-8 col-md-offset-2">
-				<table class="table">
-						<tr>
-							<td id="searchNum"></td>
-							<td id="searchName"></td>
-							<td id="searchCat"></td>
-						</tr>
-				</table>
 			</div>
 
 			<h3 style="margin-top:100px;">New Rider</h3>
@@ -81,22 +84,26 @@
 						<th>ETA</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody ng-controller="riderListCtrl" ng-repeat="x in riders">
 					<tr>
-						<td>1</td>
-						<td>Willem</td>
-						<td>Under 18s</td>
-						<td>3:45</td>
-						<td>10:03</td>
+						<td>{{ riders.number }}</td>
+						<td>{{ riders.name }}</td>
+						<td>{{ riders.category }}</td>
+						<td>{{ riders.current.start }}</td>
+						<td>{{ riders.current.end }}</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 
+	<script src="js/angular.js"></script>
+	<script src="js/angular/app.js"></script>
 	<script src="js/jquery.js"></script>
 	<script src="js/socket.io.js"></script>
 	<script src="js/socket.js"></script>
 	<script src="js/script.js"></script>
+	<script src="js/angular/searchCtrl.js"></script>
+	<script src="js/angular/riderListCtrl.js"></script>
 </body>
 </html>

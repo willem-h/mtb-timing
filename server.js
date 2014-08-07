@@ -16,6 +16,17 @@ fs.readFile('includes/riderdb.txt', {encoding: 'utf-8'}, function (err, data) {
 	riders = JSON.parse(data);
 });
 
+// function lookup () {
+// 	var lookup = [];
+// 	riders.sort(function(obj1, obj2){
+// 		return obj2.number - obj1.number;
+// 	});
+// 	for (var i=0; i<riders.length; i++) {
+// 		lookup[riders[i].number] = riders[i];
+// 	}
+// 	return lookup;
+// }
+
 io.on('connection', function(socket){
 	console.log("A user connected");
 	socket.emit("serverState", 'ready');
@@ -30,11 +41,12 @@ io.on('connection', function(socket){
 			}
 		});
 		console.log(riders);
-		socket.emit('newRider', '1');
+		socket.emit('newRider', data);
 	});
 
 	socket.on('search', function(query){
-		console.log(query);
+		query = Number(query);
+		console.log("Rider search");
 		var lookup = [];
 		riders.sort(function(obj1, obj2){
 			return obj2.number - obj1.number;
@@ -45,9 +57,35 @@ io.on('connection', function(socket){
 
 		var result = lookup[query];
 		socket.emit('searchRet', result);
-		console.log(result);
 		result = "";
 		lookup = "";
+	});
+
+	socket.on('riderList', function(){
+		console.log("Request active rider list");
+		var result = [];
+		riders.sort(function(obj1, obj2){
+			return obj2.number - obj1.number;
+		});
+		for (var i=0; i<riders.length; i++) {
+			if (riders[i].current.start > 0 && riders[i].current.end === 0) {
+				result.push(riders[i]);
+			}
+		}
+
+		socket.emit('riderList', result);
+		result = "";
+	});
+
+	socket.on('startRider', function(query){
+		var lookup = [];
+		riders.sort(function(obj1, obj2){
+			return obj2.number - obj1.number;
+		});
+		for (var i=0; i<riders.length; i++) {
+			lookup[riders[i].number] = riders[i];
+		}
+		socket.broadcast.emit('startRider', lookup[query]);
 	});
 
     socket.on('disconnect', function(){

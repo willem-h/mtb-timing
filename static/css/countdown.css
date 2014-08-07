@@ -1,0 +1,46 @@
+.go {
+    background: #6cd800;
+    color: white;
+}
+
+.returnToNormal {
+    background: #ffffff;
+    -webkit-transition: background .5s ease-in-out;
+    /*-webkit-transition: color .5s ease-in-out;*/
+}
+
+.returnText {
+    color: #333;
+    -webkit-transition: color 1s ease-in-out;
+}
+
+#riderInfo h1 {
+    position: absolute;
+    display: inline-block;
+    margin-top: 50px;
+    width: 100%;
+    font-size: 50px;
+}
+
+#riderInfo h1:nth-child(1) {
+    text-align: left;
+}
+
+#riderInfo h1:nth-child(2) {
+    text-align: center;
+}
+
+#riderInfo h1:nth-child(3) {
+    text-align: right;
+}
+
+#countdown {
+    position: relative;
+    margin-top: 19%;
+}
+
+#countdown h1 {
+    font-size: 32vw;
+    text-align: center;
+    line-height: 400px;
+}

@@ -1,5 +1,5 @@
 app.controller('countCtrl', function($scope){
-    var _time = 15;
+    var _time = 10;
     var time = _time;
     var timer = null;
     $scope.mins = addZeros(Math.floor(time/60));
@@ -28,6 +28,10 @@ app.controller('countCtrl', function($scope){
                 },1500);
                 setTimeout(function(){
                     $('body').toggleClass('returnText');
+                    $scope.number = '';
+                    $scope.name = '';
+                    $scope.category = '';
+                    $scope.$apply();
                 },2200);
                 setTimeout(function(){
                     $('body').toggleClass('returnText returnToNormal go');
@@ -58,5 +62,16 @@ app.controller('countCtrl', function($scope){
         startTimer();
     });
 
-    startTimer();
+    socket.on('startRider', function(rider){
+        clearInterval(timer);
+        timer = null;
+        time = _time;
+        $scope.mins = addZeros(Math.floor(time/60));
+        $scope.secs = addZeros(time%60);
+        $scope.number = rider.number;
+        $scope.name = rider.name;
+        $scope.category = rider.category;
+        $scope.$apply();
+        startTimer();
+    });
 });
