@@ -1,3 +1,7 @@
+function currentRiderUpdate (data) {
+    $("#riderNum").val(data);
+}
+
 $(document).ready(function(){
     $("#newRider").submit(function(e){
         var name = $("#newName").val();
@@ -8,12 +12,12 @@ $(document).ready(function(){
             number: num,
             category: cat
         };
+        console.log(JSON.stringify(info));
         var newRider = socketNewRider(info);
-        console.log(newRider);
-        if (newRider == "true") {
+        if (newRider == "1") {
             $(".noti").text(name +" added successfully");
             $(".noti").addClass("notiSuccess");
-        } else {
+        } else if (newRider == '0') {
             $(".noti").text("There's a problem databasing");
             $(".noti").addClass("notiFail");
         }
@@ -22,5 +26,15 @@ $(document).ready(function(){
 
     $("#cancelNewRider").click(function(){
         $("#newRider").trigger("reset");
+    });
+
+    // Search riders
+    $('#riderNum').keyup(function(){
+        $('#searchNum, #searchName, #searchCat').text("");
+        var query = $('#riderNum').val();
+        if (query !== "" && query !== null) {
+            console.log(query);
+            socketSearch(query);
+        }
     });
 });
