@@ -55,23 +55,46 @@
 				</div>
 			</div>
 
-			<h3 style="margin-top:100px;">New Rider</h3>
-			<form role="form" id="newRider">
-				<div class="form-group">
-					<label for="newName">Name</label>
-					<input type="text" class="form-control" id="newName">
-				</div>
-				<div class="form-group">
-					<label for="newNum">Number</label>
-					<input type="number" class="form-control" id="newNum">
-				</div>
-				<div class="form-group">
-					<label for="newCat">Category</label>
-					<input type="text" class="form-control" id="newCat">
-				</div>
-				<button type="submit" class="btn btn-primary pull-right">Add Rider</button>
-				<button type="button" class="btn btn-default pull-right" id="cancelNewRider" style="margin-right:10px;">Cancel</button>
-			</form>
+			<h3 style="margin-top:100px;">
+				Rider List
+				<button class="btn btn-default pull-right">New Rider</button>
+			</h3>
+			<div id="newRiderBox" style="height:0px;">
+				<form role="form" id="newRider">
+					<div class="form-group">
+						<label for="newName">Name</label>
+						<input type="text" class="form-control" id="newName">
+					</div>
+					<div class="form-group">
+						<label for="newNum">Number</label>
+						<input type="number" class="form-control" id="newNum">
+					</div>
+					<div class="form-group">
+						<label for="newCat">Category</label>
+						<input type="text" class="form-control" id="newCat">
+					</div>
+					<button type="submit" class="btn btn-primary pull-right">Add Rider</button>
+					<button type="button" class="btn btn-default pull-right" id="cancelNewRider" style="margin-right:10px;">Cancel</button>
+				</form>	
+			</div>
+			<div id="riderList">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Name</th>
+							<th>Category</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>4</td>
+							<td>John Smith</td>
+							<td>Male</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 		<div id="currentRiders" class="col-lg-6">
 			<table class="table table-hover">
