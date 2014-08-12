@@ -1,11 +1,12 @@
-app.controller('searchCtrl', function($scope){
-    $scope.search = {
-        number: 1,
-        name: "John Smith",
-        category: "Under 18"
-    };
+app.controller('raceCtrl', function($scope){
+    $scope.search = {};
+    $scope.riders = {};
 
-    socket.on('searchRet', function(result){
+    socket.emit('riderList', function(query){
+        console.log("Request full rider list");
+    });
+
+    socket.on('search', function(result){
         if (result) {
             // result = result[0];
             console.log(result);
@@ -19,5 +20,11 @@ app.controller('searchCtrl', function($scope){
             $scope.search.category = "";
             $scope.$apply();
         }
+    });
+
+    socket.on('riderList', function(riders){
+        console.log(riders);
+        $scope.riders = riders;
+        $scope.$apply();
     });
 });

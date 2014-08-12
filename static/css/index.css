@@ -4,3 +4,8 @@
     font-size: 50px;
     text-align: center;
 }
+
+.hidden {
+    max-height: 0px;
+    overflow: hidden;
+}

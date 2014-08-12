@@ -2,6 +2,14 @@ function currentRiderUpdate (data) {
     $("#riderNum").val(data);
 }
 
+function addZeros(data) {
+    data = data.toString();
+    if (data.length == 1) {
+        data = "0" + data;
+    }
+    return data;
+}
+
 $(document).ready(function(){
     $("#newRider").submit(function(e){
         var name = $("#newName").val();
@@ -21,6 +29,7 @@ $(document).ready(function(){
         // console.log(JSON.stringify(info));
         // var newRider = socketNewRider(info);
         socket.emit("newRider", info);
+        socket.emit('riderList');
         socket.on('newRider', function(data){
             if (data.name) {
                 $(".noti").text(data.name +" added successfully");
@@ -34,6 +43,7 @@ $(document).ready(function(){
                 $(".noti").addClass("notiFail");
             }
         });
+        $('#newRiderBox, #riderList').toggleClass('hidden');
         e.preventDefault();
     });
 
@@ -55,5 +65,9 @@ $(document).ready(function(){
         socket.emit('startRider', rider);
         $('#riderNum').val('');
         e.preventDefault();
+    });
+
+    $('#newRiderBtn, #cancelNewRider').click(function(){
+        $('#newRiderBox, #riderList').toggleClass('hidden');
     });
 });

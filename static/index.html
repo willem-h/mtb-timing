@@ -34,9 +34,9 @@
 		</div><!-- /.container-fluid -->
 	</nav>
 
-	<div id="content" class="col-lg-10 col-lg-offset-1">
-		<div id="raceControl" class="col-lg-6">
-			<div  ng-controller="searchCtrl">
+	<div id="content" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
+		<div id="raceControl" class="col-lg-6 col-md-6" ng-controller="raceCtrl">
+			<div>
 				<form role="form" id="riderNumForm">
 					<div class="form-group">
 						<label for="riderNum" hidden>Start Rider</label>
@@ -44,7 +44,7 @@
 					</div>
 					<button type="submit" class="btn btn-default" style="display:none">Submit</button>
 				</form>
-				<div class="col-lg-8 col-md-offset-2">
+				<div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
 					<table class="table">
 							<tr>
 								<td>{{ search.number }}</td>
@@ -57,9 +57,9 @@
 
 			<h3 style="margin-top:100px;">
 				Rider List
-				<button class="btn btn-default pull-right">New Rider</button>
+				<button class="btn btn-default pull-right" id="newRiderBtn">New Rider</button>
 			</h3>
-			<div id="newRiderBox" style="height:0px;">
+			<div id="newRiderBox" class="hidden">
 				<form role="form" id="newRider">
 					<div class="form-group">
 						<label for="newName">Name</label>
@@ -75,7 +75,7 @@
 					</div>
 					<button type="submit" class="btn btn-primary pull-right">Add Rider</button>
 					<button type="button" class="btn btn-default pull-right" id="cancelNewRider" style="margin-right:10px;">Cancel</button>
-				</form>	
+				</form>
 			</div>
 			<div id="riderList">
 				<table class="table">
@@ -87,17 +87,17 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>4</td>
-							<td>John Smith</td>
-							<td>Male</td>
+						<tr ng-repeat="x in riders">
+							<td>{{ x.number }}</td>
+							<td>{{ x.name }}</td>
+							<td>{{ x.category }}</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 		</div>
-		<div id="currentRiders" class="col-lg-6">
-			<table class="table table-hover">
+		<div id="currentRiders" class="col-lg-6 col-md-6">
+			<table class="table table-hover" ng-controller="riderListCtrl">
 				<thead>
 					<tr>
 						<th>Number</th>
@@ -107,13 +107,13 @@
 						<th>ETA</th>
 					</tr>
 				</thead>
-				<tbody ng-controller="riderListCtrl" ng-repeat="x in riders">
-					<tr>
-						<td>{{ riders.number }}</td>
-						<td>{{ riders.name }}</td>
-						<td>{{ riders.category }}</td>
-						<td>{{ riders.current.start }}</td>
-						<td>{{ riders.current.end }}</td>
+				<tbody>
+					<tr ng-repeat="x in active">
+						<td>{{ x.number }}</td>
+						<td>{{ x.name }}</td>
+						<td>{{ x.category }}</td>
+						<td>{{ x.mins }}:{{ x.secs }}</td>
+						<td></td>
 					</tr>
 				</tbody>
 			</table>
@@ -126,7 +126,7 @@
 	<script src="js/socket.io.js"></script>
 	<script src="js/socket.js"></script>
 	<script src="js/script.js"></script>
-	<script src="js/angular/searchCtrl.js"></script>
+	<script src="js/angular/raceCtrl.js"></script>
 	<script src="js/angular/riderListCtrl.js"></script>
 </body>
 </html>

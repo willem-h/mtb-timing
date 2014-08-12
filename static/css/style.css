@@ -1,3 +1,20 @@
+body {
+	/*height: 100%;
+	width: 100%;
+	top: 0;
+	bottom: 0;
+	/*position: relative;*/
+	/*position: absolute;*/
+	/*max-height: 100%;*/
+	/*overflow: hidden;*/*/
+	/*position: static;
+	overflow: hidden;*/
+}
+
+/*#content {
+	overflow: hidden;
+}*/
+
 .noti {
 	margin-right: 20px !important;
 }
