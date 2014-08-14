@@ -55,47 +55,65 @@
 				</div>
 			</div>
 
-			<h3 style="margin-top:100px;">
-				Rider List
-				<button class="btn btn-default pull-right" id="newRiderBtn">New Rider</button>
-			</h3>
-			<div id="newRiderBox" class="hidden">
-				<form role="form" id="newRider">
-					<div class="form-group">
-						<label for="newName">Name</label>
-						<input type="text" class="form-control" id="newName">
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist">
+				<li class="active"><a href="#riderList" role="tab" data-toggle="tab">Rider List</a></li>
+				<li><a href="#newRiderBox" role="tab" data-toggle="tab">New Rider</a></li>
+				<li><a href="#lapDistBox" role="tab" data-toggle="tab">Lap Distance</a></li>
+			</ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div class="tab-pane active" id="riderList">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Name</th>
+								<th>Category</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="x in riders">
+								<td>{{ x.number }}</td>
+								<td>{{ x.name }}</td>
+								<td>{{ x.category }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="tab-pane" id="newRiderBox">
+					<form role="form" id="newRider" class="col-lg-10 col-lg-offset-1">
+						<div class="form-group">
+							<label for="newName">Name</label>
+							<input type="text" class="form-control" id="newName">
+						</div>
+						<div class="form-group">
+							<label for="newNum">Number</label>
+							<input type="number" class="form-control" id="newNum">
+						</div>
+						<div class="form-group">
+							<label for="newCat">Category</label>
+							<input type="text" class="form-control" id="newCat">
+						</div>
+						<button type="submit" class="btn btn-primary pull-right">Add Rider</button>
+						<button type="button" class="btn btn-default pull-right" id="cancelNewRider" style="margin-right:10px;">Cancel</button>
+					</form>
+				</div>
+				<div class="tab-pane" id="lapDistBox">
+					<div class="col-lg-6 col-lg-offset-3 input-group">
+						<form id="lapDistForm" class="form-inline">
+							<div class="input-group">
+								<input id="lapDist" type="text" placeholder="0" class="form-control">
+								<span class="input-group-addon">km</span>
+							</div>
+							<input type="submit" value="Save" class="form-control btn btn-primary" id="saveDist">
+						</form>
 					</div>
-					<div class="form-group">
-						<label for="newNum">Number</label>
-						<input type="number" class="form-control" id="newNum">
-					</div>
-					<div class="form-group">
-						<label for="newCat">Category</label>
-						<input type="text" class="form-control" id="newCat">
-					</div>
-					<button type="submit" class="btn btn-primary pull-right">Add Rider</button>
-					<button type="button" class="btn btn-default pull-right" id="cancelNewRider" style="margin-right:10px;">Cancel</button>
-				</form>
-			</div>
-			<div id="riderList">
-				<table class="table">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Name</th>
-							<th>Category</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="x in riders">
-							<td>{{ x.number }}</td>
-							<td>{{ x.name }}</td>
-							<td>{{ x.category }}</td>
-						</tr>
-					</tbody>
-				</table>
+				</div>
 			</div>
 		</div>
+
 		<div id="currentRiders" class="col-lg-6 col-md-6">
 			<table class="table table-hover" ng-controller="riderListCtrl">
 				<thead>
@@ -112,8 +130,8 @@
 						<td>{{ x.number }}</td>
 						<td>{{ x.name }}</td>
 						<td>{{ x.category }}</td>
-						<td>{{ x.mins }}:{{ x.secs }}</td>
-						<td></td>
+						<td>{{ x.time }}</td>
+						<td>{{ x.etaTime }}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -123,6 +141,7 @@
 	<script src="js/angular.js"></script>
 	<script src="js/angular/app.js"></script>
 	<script src="js/jquery.js"></script>
+	<script src="bootstrap/js/tab.js"></script>
 	<script src="js/socket.io.js"></script>
 	<script src="js/socket.js"></script>
 	<script src="js/script.js"></script>

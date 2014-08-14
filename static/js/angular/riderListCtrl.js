@@ -5,27 +5,30 @@ app.controller('riderListCtrl', function($scope){
     });
 
     socket.on('activeList', function(data){
-        console.log("Returned rider list");
-        // console.log(data);
-
-        // data.calc = function(){
-        //     setInterval(function(){
-        //         var time = Math.floor(Date.now()/1000) - this.current.start;
-        //         $scope.$apply();
-        //         return time;
-        //     },1000);
-        // };
-
         // Make seconds into minutes and seconds
         for (var i=0; i<data.length; i++) {
+            // Work out lap time
+            var negativeSign = "";
             var time = Math.floor(Date.now()/1000) - data[i].current.start;
-            console.log(time);
-            var mins = addZeros(Math.floor(time/60));
-            var secs = addZeros(time%60);
-            // $scope.secs = addZeros(time%60);
-            // $scope.mins = addZeros(Math.floor(time/60));
-            data[i].mins = mins;
-            data[i].secs = secs;
+            var mins = addZeros(Math.abs(Math.floor(time/60)));
+            var secs = addZeros(Math.abs(time%60));
+            if (time < 0) {
+                negativeSign = "-";
+                mins = addZeros(Math.abs(Math.ceil(time/60)));
+            }
+            data[i].time = negativeSign + mins +":"+ secs;
+
+            // Work out ETA time
+            var avgSpeed = (data[i].totalDistance * 1000) / data[i].totalTime;
+            var etaTime = Math.round(((localStore.distance * 1000) / avgSpeed));
+            etaTime = etaTime - time;
+            var etaMins = addZeros(Math.abs(Math.ceil(etaTime/60)));
+            var etaSecs = addZeros(Math.abs(etaTime%60));
+            if (etaTime > 0) {
+                negativeSign = "-";
+                etaMins = addZeros(Math.abs(Math.floor(etaTime/60)));
+            }
+            data[i].etaTime = negativeSign + etaMins +":"+ etaSecs;
         }
 
         $scope.active = data;
@@ -33,7 +36,6 @@ app.controller('riderListCtrl', function($scope){
     });
 
     setInterval(function(){
-        $scope.currentTime = Math.floor(Date.now()/1000);
-        $scope.$apply();
+        socket.emit('activeList');
     },1000);
 });

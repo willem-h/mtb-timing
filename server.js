@@ -42,11 +42,6 @@ function activeList (data) {
 	result = "";
 }
 
-setInterval(function(){
-	activeList(riders);
-	io.sockets.emit('time');
-},1000);
-
 io.on('connection', function(socket){
 	console.log("A user connected");
 	socket.emit("serverState", 'ready');
@@ -59,7 +54,6 @@ io.on('connection', function(socket){
 
 	socket.on('search', function(query){
 		query = Number(query);
-		// console.log("Rider search");
 		var lookup = [];
 		riders.sort(function(obj1, obj2){
 			return obj2.number - obj1.number;
@@ -88,8 +82,9 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('startRider', function(query){
+		distance = query[1];
+		query = query[0]
 		var time = Math.floor(Date.now()/1000);
-		var startTime = time + 5 + 4;
 		var lookup = [];
 		riders.sort(function(obj1, obj2){
 			return obj1.number - obj2.number;
@@ -98,27 +93,54 @@ io.on('connection', function(socket){
 			lookup[riders[i].number] = riders[i];
 		}
 
-		riders.sort(function(obj1, obj2){
-			return obj2.current.start - obj1.current.start;
-		});
-		if (time - riders[0].current.start < 5) {
-			startTime = riders[0].current.start + 5 + 4;
-		}
+		if (lookup[query].current.start === 0 && lookup[query].current.end === 0) {
+			var startTime = time + 10;
 
-		for (var i=0; i<riders.length; i++) {
-			if (riders[i].number === query) {
-				riders[i].current.start = startTime;
+			riders.sort(function(obj1, obj2){
+				return obj2.current.start - obj1.current.start;
+			});
+			if (time - riders[0].current.start < 10) {
+				startTime = riders[0].current.start + 10 + 4;
+			}
+
+			for (var i=0; i<riders.length; i++) {
+				if (riders[i].number === query) {
+					riders[i].current.start = startTime;
+					riders[i].current.distance = distance;
+				}
+			}
+
+			if (startList.length === 0) {
+				socket.broadcast.emit('startRider', { rider:lookup[query], start:startTime });
+				console.log("Started rider: "+ query);
+			} else {
+				console.log("Rider queued: "+ lookup[query].name);
+			}
+
+			startList.push({ rider:lookup[query], start:startTime });
+		} else if (lookup[query].current.start > 0 && lookup[query].current.end === 0) {
+			var endTime = time;
+
+			for (var i=0; i<riders.length; i++) {
+				if (riders[i].number === query) {
+					var laps = riders[i].laps;
+					var lapData = {
+						start: riders[i].current.start,
+						end: endTime,
+						distance: riders[i].current.distance,
+					};
+					laps.push(lapData);
+					riders[i].totalTime += (endTime - riders[i].current.start);
+					riders[i].totalDistance = Number(riders[i].totalDistance) + Number(riders[i].current.distance);
+					riders[i].current = {
+						start: 0,
+						end: 0,
+						distance: 0
+					};
+				}
 			}
 		}
 
-		if (startList.length === 0) {
-			socket.broadcast.emit('startRider', { rider:lookup[query], start:startTime });
-			console.log("Started rider: "+ query);
-		} else {
-			console.log("Rider queued: "+ lookup[query].name);
-		}
-
-		startList.push({ rider:lookup[query], start:startTime });
 		activeList(riders);
 		saveDB(riders);
 	});
@@ -126,7 +148,6 @@ io.on('connection', function(socket){
 	socket.on('riderSent', function(data){
 		setTimeout(function(){
 			console.log("Rider sent: "+ data);
-			// console.log(startList);
 			startList.shift();
 			if (startList.length > 0) {
 				socket.emit('startRider', startList[0]);
@@ -138,6 +159,17 @@ io.on('connection', function(socket){
     socket.on('disconnect', function(){
         console.log("A user disconnected");
     });
+
+	// // Reset database without removing riders
+	// for (var i=0; i<riders.length; i++) {
+	// 	riders[i].current.start = 0;
+	// 	riders[i].current.end = 0;
+	// 	riders[i].current.distance = 0;
+	// 	riders[i].laps = [];
+	// 	riders[i].totalTime = 0;
+	// 	riders[i].totalDistance = 0;
+	// }
+	// saveDB(riders);
 });
 
 var port = Number(process.env.PORT || 5000);

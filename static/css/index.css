@@ -9,3 +9,19 @@
     max-height: 0px;
     overflow: hidden;
 }
+
+#lapDistBtn {
+    margin-right: 10px;
+}
+
+.tab-content {
+    margin-top: 20px;
+}
+
+#riderList {
+    margin-top: -20px;
+}
+
+#saveDist {
+    margin-top: 10px;
+}

@@ -1,3 +1,12 @@
+var localStore;
+if (localStorage.mtb_timing) {
+    localStore = JSON.parse(localStorage.mtb_timing);
+} else {
+    localStore = {
+        distance: 0,
+    };
+}
+
 function currentRiderUpdate (data) {
     $("#riderNum").val(data);
 }
@@ -11,6 +20,8 @@ function addZeros(data) {
 }
 
 $(document).ready(function(){
+    $("#lapDist").val(localStore.distance);
+
     $("#newRider").submit(function(e){
         var name = $("#newName").val();
         var num = $("#newNum").val();
@@ -20,14 +31,15 @@ $(document).ready(function(){
             number: num,
             category: cat,
             current: {
-                    start: 30,
-                    end: 0,
+                start: 0,
+                end: 0,
+                distance: 0
             },
-            laps: {},
-            avgSpeed: 0
+            laps: [],
+            totalTime: 0,
+            totalDistance: 0
         };
-        // console.log(JSON.stringify(info));
-        // var newRider = socketNewRider(info);
+        
         socket.emit("newRider", info);
         socket.emit('riderList');
         socket.on('newRider', function(data){
@@ -62,12 +74,17 @@ $(document).ready(function(){
 
     $('#riderNumForm').submit(function(e){
         var rider = $('#riderNum').val();
-        socket.emit('startRider', rider);
+        var distance = $("#lapDist").val();
+        socket.emit('startRider', [rider,distance]);
         $('#riderNum').val('');
         e.preventDefault();
     });
 
-    $('#newRiderBtn, #cancelNewRider').click(function(){
-        $('#newRiderBox, #riderList').toggleClass('hidden');
+    $("#lapDistForm").submit(function(e){
+        var distance = $("#lapDist").val();
+        console.log("Submit distance: "+ distance);
+        localStore.distance = distance;
+        localStorage.setItem('mtb_timing', JSON.stringify(localStore));
+        e.preventDefault();
     });
 });
