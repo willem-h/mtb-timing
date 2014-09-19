@@ -36,16 +36,6 @@ app.controller('countCtrl', function($scope){
         },1000);
     }
 
-    $('#reset').click(function(){
-        clearInterval(timer);
-        timer = null;
-        time = _time;
-        $scope.mins = addZeros(Math.floor(time/60));
-        $scope.secs = addZeros(time%60);
-        $scope.$apply();
-        startTimer();
-    });
-
     socket.on('startRider', function(data){
         console.log("Start rider: "+ data.rider.name);
 

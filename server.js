@@ -42,6 +42,25 @@ function activeList (data) {
 	result = "";
 }
 
+function resultList (data) {
+	var current = [];
+	var recent = [];
+	data.sort(function(obj1, obj2){
+		return obj1.current.start - obj2.current.start;
+	});
+	for (var i=0; i<data.length; i++) {
+		if (data[i].current.start > 0 && data[i].current.end === 0) {
+			current.push(data[i]);
+		}
+	}
+	data.sort(function(obj1, obj2){
+		return obj1.current.start - obj2.current.start;
+	});
+
+	io.sockets.emit('resultList', {current:current, recent:recent});
+	current = "";
+}
+
 io.on('connection', function(socket){
 	console.log("A user connected");
 	socket.emit("serverState", 'ready');
@@ -83,7 +102,7 @@ io.on('connection', function(socket){
 
 	socket.on('startRider', function(query){
 		distance = query[1];
-		query = query[0]
+		query = query[0];
 		var time = Math.floor(Date.now()/1000);
 		var lookup = [];
 		riders.sort(function(obj1, obj2){
@@ -154,6 +173,10 @@ io.on('connection', function(socket){
 				console.log("Started next rider: "+ startList[0].rider.name);
 			}
 		},3700);
+	});
+
+	socket.on('resultList', function(){
+		resultList(riders);
 	});
 
     socket.on('disconnect', function(){

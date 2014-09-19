@@ -20,15 +20,20 @@ app.controller('riderListCtrl', function($scope){
 
             // Work out ETA time
             var avgSpeed = (data[i].totalDistance * 1000) / data[i].totalTime;
-            var etaTime = Math.round(((localStore.distance * 1000) / avgSpeed));
-            etaTime = etaTime - time;
-            var etaMins = addZeros(Math.abs(Math.ceil(etaTime/60)));
-            var etaSecs = addZeros(Math.abs(etaTime%60));
-            if (etaTime > 0) {
-                negativeSign = "-";
-                etaMins = addZeros(Math.abs(Math.floor(etaTime/60)));
+            if (avgSpeed) {
+                console.log(avgSpeed);
+                var etaTime = Math.round(((localStore.distance * 1000) / avgSpeed));
+                etaTime = etaTime - time;
+                var etaMins = addZeros(Math.abs(Math.ceil(etaTime/60)));
+                var etaSecs = addZeros(Math.abs(etaTime%60));
+                if (etaTime > 0) {
+                    negativeSign = "-";
+                    etaMins = addZeros(Math.abs(Math.floor(etaTime/60)));
+                }
+                data[i].etaTime = negativeSign + etaMins +":"+ etaSecs;
+            } else {
+                data[i].etaTime = "N/A";
             }
-            data[i].etaTime = negativeSign + etaMins +":"+ etaSecs;
         }
 
         $scope.active = data;
