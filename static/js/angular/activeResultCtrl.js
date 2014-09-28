@@ -1,8 +1,5 @@
-app.controller('riderListCtrl', function($scope){
-    $scope.active = []
-    socket.emit('activeList', function(){
-        console.log("Request active rider list");
-    });
+app.controller('activeResultCtrl', function($scope){
+    $scope.active = [];
 
     socket.on('activeList', function(data){
         // Make seconds into minutes and seconds
@@ -36,11 +33,24 @@ app.controller('riderListCtrl', function($scope){
             }
         }
 
+        // Limit array to 5 elements and add some if less to preserve page formatting
+        if (data.length > 5) {
+            data = data.slice(0,5);
+        } else {
+            var num = 5 - data.length;
+            for (var x=0; x<num; x++) {
+                var dummy = {
+                    number: "-",
+                    name: "-",
+                    category: "-",
+                    time: "-",
+                    etaTime: "-"
+                };
+                data.push(dummy);
+            }
+        }
+
         $scope.active = data;
         $scope.$apply();
     });
-
-    // setInterval(function(){
-    //     socket.emit('activeList');
-    // },1000);
 });

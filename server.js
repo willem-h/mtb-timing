@@ -7,6 +7,7 @@ io = io(server);
 var fs = require("fs");
 
 var riders;
+var recents;
 var startList = [];
 
 // Make Express be server
@@ -17,17 +18,31 @@ fs.readFile('includes/riderdb.txt', {encoding: 'utf-8'}, function (err, data) {
 	riders = JSON.parse(data);
 });
 
-function saveDB (data) {
-	fs.writeFile('includes/riderdb.txt', JSON.stringify(data), function(err){
+fs.readFile('includes/recentdb.txt', {encoding: 'utf-8'}, function (err, data) {
+	if (err) throw err;
+	recents = JSON.parse(data);
+});
+
+function saveDB (rider,recent) {
+	fs.writeFile('includes/riderdb.txt', JSON.stringify(rider), function(err){
 		if (err) {
-			console.log("Error saving DB: "+ err);
+			console.log("Error saving RiderDB: "+ err);
 		} else {
 			// console.log('RiderDB saved successfully');
+		}
+	});
+
+	fs.writeFile('includes/recentdb.txt', JSON.stringify(recent), function(err){
+		if (err) {
+			console.log("Error saving RecentDB: "+ err);
+		} else {
+			// console.log('RecentDB saved successfully');
 		}
 	});
 }
 
 function activeList (data) {
+	// console.log("Current riders requested");
 	var result = [];
 	data.sort(function(obj1, obj2){
 		return obj1.current.start - obj2.current.start;
@@ -61,13 +76,18 @@ function resultList (data) {
 	current = "";
 }
 
+function recentList (data) {
+	console.log("Request recent list");
+	io.sockets.emit('recentList', data);
+}
+
 io.on('connection', function(socket){
 	console.log("A user connected");
 	socket.emit("serverState", 'ready');
 
 	socket.on('newRider', function(data){
 		riders.push(data);
-		saveDB(riders);
+		saveDB(riders,recents);
 		socket.emit('newRider', data);
 	});
 
@@ -87,9 +107,9 @@ io.on('connection', function(socket){
 		lookup = "";
 	});
 
-	socket.on('activeList', function(){
-		activeList(riders);
-	});
+	// socket.on('activeList', function(){
+	// 	activeList(riders);
+	// });
 
 	socket.on('riderList', function(){
 		console.log("Request full rider list");
@@ -100,10 +120,14 @@ io.on('connection', function(socket){
 		socket.emit('riderList', riders);
 	});
 
+	socket.on('recentList', function(){
+		recentList(recents);
+	});
+
 	socket.on('startRider', function(query){
 		distance = query[1];
 		query = query[0];
-		var time = Math.floor(Date.now()/1000);
+		// var time = Math.floor(Date.now()/1000);
 		var lookup = [];
 		riders.sort(function(obj1, obj2){
 			return obj1.number - obj2.number;
@@ -113,6 +137,7 @@ io.on('connection', function(socket){
 		}
 
 		if (lookup[query].current.start === 0 && lookup[query].current.end === 0) {
+			var time = Math.floor(Date.now()/1000);
 			var startTime = time + 10;
 
 			riders.sort(function(obj1, obj2){
@@ -138,7 +163,7 @@ io.on('connection', function(socket){
 
 			startList.push({ rider:lookup[query], start:startTime });
 		} else if (lookup[query].current.start > 0 && lookup[query].current.end === 0) {
-			var endTime = time;
+			var endTime = Math.floor(Date.now()/1000);
 
 			for (var i=0; i<riders.length; i++) {
 				if (riders[i].number === query) {
@@ -151,17 +176,22 @@ io.on('connection', function(socket){
 					laps.push(lapData);
 					riders[i].totalTime += (endTime - riders[i].current.start);
 					riders[i].totalDistance = Number(riders[i].totalDistance) + Number(riders[i].current.distance);
+					console.log("Stopped rider: " + query + ". Time: " + (endTime - riders[i].current.start));
 					riders[i].current = {
 						start: 0,
 						end: 0,
 						distance: 0
 					};
+					recents.push(riders[i]);
 				}
 			}
+
+			// Update Recent on results page
+			recentList(recents);
 		}
 
 		activeList(riders);
-		saveDB(riders);
+		saveDB(riders,recents);
 	});
 
 	socket.on('riderSent', function(data){
@@ -179,6 +209,8 @@ io.on('connection', function(socket){
 		resultList(riders);
 	});
 
+	// console.log(recents);
+
     socket.on('disconnect', function(){
         console.log("A user disconnected");
     });
@@ -192,8 +224,12 @@ io.on('connection', function(socket){
 	// 	riders[i].totalTime = 0;
 	// 	riders[i].totalDistance = 0;
 	// }
-	// saveDB(riders);
+	// saveDB(riders,recents);
 });
+
+setInterval(function(){
+	activeList(riders);
+},1000);
 
 var port = Number(process.env.PORT || 5000);
 server.listen(port, function(){
