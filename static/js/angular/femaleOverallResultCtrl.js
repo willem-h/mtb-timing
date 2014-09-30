@@ -1,7 +1,7 @@
-app.controller('maleOverallResultCtrl', function($scope){
-    $scope.maleOverall = [];
+app.controller('femaleOverallResultCtrl', function($scope){
+    $scope.femaleOverall = [];
 
-    socket.on('maleOverallList', function(data){
+    socket.on('femaleOverallList', function(data){
         // Make seconds into minutes and seconds
         for (var i=0; i<data.length; i++) {
             // Work out lap time
@@ -33,7 +33,7 @@ app.controller('maleOverallResultCtrl', function($scope){
             }
         }
 
-        $scope.maleOverall = data;
+        $scope.femaleOverall = data;
         $scope.$apply();
     });
 });

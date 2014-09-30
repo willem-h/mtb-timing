@@ -22,7 +22,12 @@ fs.readFile('includes/recentdb.txt', {encoding: 'utf-8'}, function (err, data) {
 	recents = JSON.parse(data);
 });
 
-function saveDB (rider,recent) {
+fs.readFile('includes/maleoveralldb.txt', {encoding: 'utf-8'}, function (err, data) {
+	if (err) throw err;
+	maleOverall = JSON.parse(data);
+});
+
+function saveDB (rider,recent,maleOverall) {
 	fs.writeFile('includes/riderdb.txt', JSON.stringify(rider), function(err){
 		if (err) {
 			console.log("Error saving RiderDB: "+ err);
@@ -34,6 +39,14 @@ function saveDB (rider,recent) {
 	fs.writeFile('includes/recentdb.txt', JSON.stringify(recent), function(err){
 		if (err) {
 			console.log("Error saving RecentDB: "+ err);
+		} else {
+			// console.log('RecentDB saved successfully');
+		}
+	});
+
+	fs.writeFile('includes/maleoveralldb.txt', JSON.stringify(recent), function(err){
+		if (err) {
+			console.log("Error saving maleoverallDB: "+ err);
 		} else {
 			// console.log('RecentDB saved successfully');
 		}
@@ -80,6 +93,70 @@ function recentList (data) {
 	io.sockets.emit('recentList', data);
 }
 
+function overall (data) {
+	console.log("Request Overall");
+	var fastestLaps = [];
+	var maleFastestLaps = [];
+	var femaleFastestLaps = [];
+
+	data.sort(function(obj2, obj1){
+		return obj2.number - obj1.number;
+	});
+
+	for(var x = 0; x < data.length; x++){
+		if (data[x].laps.length > 0){
+			data[x].laps.sort(function(obj1, obj2){
+				return (obj1.end - obj1.start) - (obj2.end - obj2.start);
+			});
+
+			fastestLaps[x] = {
+				rank: x,
+				number: data[x].number,
+				name: data[x].name,
+				category: data[x].category, 
+				lap: data[x].laps[0]
+			}
+		}
+	}
+
+	fastestLaps.sort(function(obj2, obj1){
+		if (obj1.lap && obj2.lap){
+			return (obj1.lap.end - obj1.lap.start) - (obj2.lap.end - obj2.lap.start);
+		}
+	});
+
+	fastestLaps.reverse();
+
+	for(var x = 0; x < fastestLaps.length; x++){
+		fastestLaps[x].rank = x + 1;
+	}
+
+	io.sockets.emit('overallList', fastestLaps);
+
+	for(var x = 0; x < fastestLaps.length; x++){
+		if (fastestLaps[x].category === "Male" || fastestLaps[x].category === "Junior Male"){
+			maleFastestLaps.push(fastestLaps[x]);
+		} else if (fastestLaps[x].category === "Female" || fastestLaps[x].category === "Junior Female"){
+			femaleFastestLaps.push(fastestLaps[x]);
+		}
+	}
+
+	for(var x = 0; x < maleFastestLaps.length; x++){
+		maleFastestLaps[x].rank = x + 1;
+	}
+
+	for(var x = 0; x < femaleFastestLaps.length; x++){
+		femaleFastestLaps[x].rank = x + 1;
+	}
+
+	io.sockets.emit('maleOverallList', maleFastestLaps);
+	io.sockets.emit('femaleOverallList', femaleFastestLaps);
+}
+
+function maleOverallList (data) {
+
+}
+
 io.on('connection', function(socket){
 	console.log("A user connected");
 	socket.emit("serverState", 'ready');
@@ -106,10 +183,6 @@ io.on('connection', function(socket){
 		lookup = "";
 	});
 
-	// socket.on('activeList', function(){
-	// 	activeList(riders);
-	// });
-
 	socket.on('riderList', function(){
 		console.log("Request full rider list");
 		riders.sort(function(obj1, obj2){
@@ -121,6 +194,14 @@ io.on('connection', function(socket){
 
 	socket.on('recentList', function(){
 		recentList(recents);
+	});
+
+	socket.on('maleOverallList', function(){
+		maleOverallList(maleOverall);
+	});
+
+	socket.on('overallList', function(){
+		overall(riders);
 	});
 
 	socket.on('startRider', function(query){
@@ -182,12 +263,12 @@ io.on('connection', function(socket){
 						distance: 0
 					};
 					recents.push(riders[i]);
-					overall(riders[i]);
 				}
 			}
 
-			// Update Recent on results page
+			// Update results page
 			recentList(recents);
+			overall(riders);
 		}
 
 		activeList(riders);
@@ -202,20 +283,18 @@ io.on('connection', function(socket){
 				socket.emit('startRider', startList[0]);
 				console.log("Started next rider: "+ startList[0].rider.name);
 			}
-		},3700);
+		},4000);
 	});
 
 	socket.on('resultList', function(){
 		resultList(riders);
 	});
 
-	// console.log(recents);
-
     socket.on('disconnect', function(){
         console.log("A user disconnected");
     });
 
-	// // Reset database without removing riders
+	// Reset database without removing riders
 	// for (var i=0; i<riders.length; i++) {
 	// 	riders[i].current.start = 0;
 	// 	riders[i].current.end = 0;

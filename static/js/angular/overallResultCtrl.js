@@ -1,7 +1,8 @@
-app.controller('maleOverallResultCtrl', function($scope){
-    $scope.maleOverall = [];
+app.controller('overallResultCtrl', function($scope){
+    $scope.overall = [];
+    socket.emit('overallList');
 
-    socket.on('maleOverallList', function(data){
+    socket.on('overallList', function(data){
         // Make seconds into minutes and seconds
         for (var i=0; i<data.length; i++) {
             // Work out lap time
@@ -17,10 +18,10 @@ app.controller('maleOverallResultCtrl', function($scope){
         }
 
         // Limit array to 5 elements and add some if less to preserve page formatting
-        if (data.length > 5) {
-            data = data.slice(0,5);
+        if (data.length > 13) {
+            data = data.slice(0,13);
         } else {
-            var num = 5 - data.length;
+            var num = 13 - data.length;
             for (var x=0; x<num; x++) {
                 var dummy = {
                     rank: "-",
@@ -33,7 +34,7 @@ app.controller('maleOverallResultCtrl', function($scope){
             }
         }
 
-        $scope.maleOverall = data;
+        $scope.overall = data;
         $scope.$apply();
     });
 });

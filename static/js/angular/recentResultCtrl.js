@@ -3,7 +3,7 @@ app.controller('recentResultCtrl', function($scope){
     socket.emit('recentList');
 
     socket.on('recentList', function(data){
-        console.log(data);
+        // console.log(data);
         data = data.reverse();
 
         // Make seconds into minutes and seconds
