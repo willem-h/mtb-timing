@@ -6,8 +6,7 @@ var io = require('socket.io');
 io = io(server);
 var fs = require("fs");
 
-var riders;
-var recents;
+var riders, recents, maleOverall, femaleOverall, overall;
 var startList = [];
 
 // Make Express be server
@@ -183,6 +182,7 @@ io.on('connection', function(socket){
 						distance: 0
 					};
 					recents.push(riders[i]);
+					overall(riders[i]);
 				}
 			}
 

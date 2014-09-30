@@ -1,3 +1,4 @@
 node_modules/
 static/church/
 test.js
+npm-debug.log
