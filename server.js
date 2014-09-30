@@ -98,6 +98,7 @@ function overall (data) {
 	var fastestLaps = [];
 	var maleFastestLaps = [];
 	var femaleFastestLaps = [];
+	var handicaps = [];
 
 	data.sort(function(obj2, obj1){
 		return obj2.number - obj1.number;
@@ -114,7 +115,8 @@ function overall (data) {
 				number: data[x].number,
 				name: data[x].name,
 				category: data[x].category, 
-				lap: data[x].laps[0]
+				lap: data[x].laps[0],
+				offset: 0
 			}
 		}
 	}
@@ -132,6 +134,17 @@ function overall (data) {
 	}
 
 	io.sockets.emit('overallList', fastestLaps);
+
+	var fastestTime = fastestLaps[0].lap.end - fastestLaps[0].lap.start;
+	console.log(fastestLaps[0].lap.end);
+	// handicaps = fastestLaps;
+
+	for(var x = 0; x < fastestLaps.length; x++){
+		fastestLaps[x].offset = (fastestLaps[x].lap.end - fastestLaps[x].lap.start) - fastestTime;
+		console.log(fastestLaps[x].offset);
+	}
+
+	io.sockets.emit('handicapList', fastestLaps);
 
 	for(var x = 0; x < fastestLaps.length; x++){
 		if (fastestLaps[x].category === "Male" || fastestLaps[x].category === "Junior Male"){

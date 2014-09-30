@@ -4,3 +4,7 @@
 
 Countdown makes it easy to start riders,
 Results make it easy to see, well, the results
+
+
+### Big Thanks to
+* Michael Smith
