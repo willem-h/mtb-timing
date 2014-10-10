@@ -9,10 +9,11 @@ app.controller('raceCtrl', function($scope){
     socket.on('search', function(result){
         if (result) {
             // result = result[0];
-            console.log(result);
+            // console.log(result);
             $scope.search.number = result.number;
             $scope.search.name = result.name;
             $scope.search.category = result.category;
+            // $scope.search = "<td>"+ result.number +"</td><td>"+ result.name +"</td><td>"+ result.category +"</td>";
             $scope.$apply();
         } else {
             $scope.search.number = "";
@@ -23,7 +24,7 @@ app.controller('raceCtrl', function($scope){
     });
 
     socket.on('riderList', function(riders){
-        console.log(riders);
+        // console.log(riders);
         $scope.riders = riders;
         $scope.$apply();
     });

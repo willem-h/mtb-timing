@@ -22,12 +22,7 @@ fs.readFile('includes/recentdb.txt', {encoding: 'utf-8'}, function (err, data) {
 	recents = JSON.parse(data);
 });
 
-fs.readFile('includes/maleoveralldb.txt', {encoding: 'utf-8'}, function (err, data) {
-	if (err) throw err;
-	maleOverall = JSON.parse(data);
-});
-
-function saveDB (rider,recent,maleOverall) {
+function saveDB (rider,recent) {
 	fs.writeFile('includes/riderdb.txt', JSON.stringify(rider), function(err){
 		if (err) {
 			console.log("Error saving RiderDB: "+ err);
@@ -39,14 +34,6 @@ function saveDB (rider,recent,maleOverall) {
 	fs.writeFile('includes/recentdb.txt', JSON.stringify(recent), function(err){
 		if (err) {
 			console.log("Error saving RecentDB: "+ err);
-		} else {
-			// console.log('RecentDB saved successfully');
-		}
-	});
-
-	fs.writeFile('includes/maleoveralldb.txt', JSON.stringify(recent), function(err){
-		if (err) {
-			console.log("Error saving maleoverallDB: "+ err);
 		} else {
 			// console.log('RecentDB saved successfully');
 		}
@@ -114,7 +101,7 @@ function overall (data) {
 				rank: x,
 				number: data[x].number,
 				name: data[x].name,
-				category: data[x].category, 
+				category: data[x].category,
 				lap: data[x].laps[0],
 				offset: 0
 			}
@@ -166,10 +153,6 @@ function overall (data) {
 	io.sockets.emit('femaleOverallList', femaleFastestLaps);
 }
 
-function maleOverallList (data) {
-
-}
-
 io.on('connection', function(socket){
 	console.log("A user connected");
 	socket.emit("serverState", 'ready');
@@ -181,16 +164,24 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('search', function(query){
-		query = Number(query);
+		var query = Number(query);
+		var result = {};
 		var lookup = [];
+
 		riders.sort(function(obj1, obj2){
 			return obj2.number - obj1.number;
 		});
+
 		for (var i=0; i<riders.length; i++) {
 			lookup[riders[i].number] = riders[i];
 		}
 
-		var result = lookup[query];
+		if (!lookup[query] && query) {
+			result.name = "Unknown Rider"
+		} else {
+			var result = lookup[query];
+		}
+
 		socket.emit('search', result);
 		result = "";
 		lookup = "";
@@ -207,10 +198,6 @@ io.on('connection', function(socket){
 
 	socket.on('recentList', function(){
 		recentList(recents);
-	});
-
-	socket.on('maleOverallList', function(){
-		maleOverallList(maleOverall);
 	});
 
 	socket.on('overallList', function(){
@@ -276,6 +263,10 @@ io.on('connection', function(socket){
 						distance: 0
 					};
 					recents.push(riders[i]);
+					recents.reverse();
+					recents.slice(0,5);
+					recents.reverse();
+					
 				}
 			}
 
