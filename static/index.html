@@ -65,14 +65,40 @@
 			<!-- Nav tabs -->
 			<br><br>
 			<ul class="nav nav-tabs" role="tablist">
-				<li class="active"><a href="#riderList" role="tab" data-toggle="tab">Rider List</a></li>
+				<li class="active"><a href="#resultsBox" role="tab" data-toggle="tab">Recent Results</a></li>
+				<li><a href="#riderList" role="tab" data-toggle="tab">Riders</a></li>
 				<li><a href="#newRiderBox" role="tab" data-toggle="tab">New Rider</a></li>
-				<li><a href="#lapDistBox" role="tab" data-toggle="tab">Lap Distance</a></li>
+				<!-- <li><a href="#lapDistBox" role="tab" data-toggle="tab">Lap Distance</a></li> -->
+				<li><a href="#categories" role="tab" data-toggle="tab">Categories</a></li>
+				<li><a href="#tracks" role="tab" data-toggle="tab">Tracks</a></li>
 			</ul>
 
 			<!-- Tab panes -->
 			<div class="tab-content">
-				<div class="tab-pane active" id="riderList">
+				<div class="tab-pane active" id="resultsBox">
+					<!-- Recent Finishers -->
+					<div class="col-lg-12">
+							<table class="table" ng-controller="recentResultCtrl">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Name</th>
+										<th>Category</th>
+										<th>Time</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="x in recent">
+										<td>{{ x.number }}</td>
+										<td>{{ x.name }}</td>
+										<td>{{ x.category }}</td>
+										<td>{{ x.time }}</td>
+									</tr>
+								</tbody>
+							</table>
+					</div>
+				</div>
+				<div class="tab-pane" id="riderList">
 					<table class="table">
 						<thead>
 							<tr>
@@ -93,17 +119,19 @@
 				<div class="tab-pane" id="newRiderBox">
 					<form role="form" id="newRider" class="col-lg-10 col-lg-offset-1">
 						<div class="form-group">
-							<label for="newName">Name</label>
-							<input type="text" class="form-control" id="newName">
+							<label class="control-label" for="newName">Name</label>
+							<input type="text" class="form-control" id="newName" required>
 						</div>
 						<div class="form-group">
-							<label for="newNum">Number</label>
-							<input type="number" class="form-control" id="newNum">
+							<label class="control-label" for="newNum">Number</label>
+							<input type="number" class="form-control" id="newNum" required>
 						</div>
 						<div class="form-group">
-							<label for="newCat">Category</label>
+							<label class="control-label" for="newCat">Category</label>
 							<!-- <input type="text" class="form-control" id="newCat"> -->
-							<select class="form-control" id="newCat">
+							<select class="form-control" id="newCat" required>
+								<option ng-repeat="x in categories">{{ x.category }}</option>
+								<option></option>
 								<option>Male</option>
 								<option>Female</option>
 								<option>Junior Male</option>
@@ -115,7 +143,29 @@
 						<button type="button" class="btn btn-default pull-right" id="cancelNewRider" style="margin-right:10px;">Cancel</button>
 					</form>
 				</div>
-				<div class="tab-pane" id="lapDistBox">
+				<div class="tab-pane" id="categories">
+					<!-- <div class="col-lg-6 col-lg-offset-3 input-group">
+						<form id="lapDistForm" class="form-inline">
+							<div class="input-group">
+								<input id="lapDist" type="text" placeholder="0" class="form-control">
+								<span class="input-group-addon">km</span>
+							</div>
+							<input type="submit" value="Save" class="form-control btn btn-primary" id="saveDist">
+						</form>
+					</div> -->
+				</div>
+				<div class="tab-pane" id="tracks">
+					<div class="col-lg-6 col-lg-offset-3 input-group">
+						<!-- <form id="lapDistForm" class="form-inline">
+							<div class="input-group">
+								<input id="lapDist" type="text" placeholder="0" class="form-control">
+								<span class="input-group-addon">km</span>
+							</div>
+							<input type="submit" value="Save" class="form-control btn btn-primary" id="saveDist">
+						</form> -->
+					</div>
+				</div>
+				<!-- <div class="tab-pane" id="lapDistBox">
 					<div class="col-lg-6 col-lg-offset-3 input-group">
 						<form id="lapDistForm" class="form-inline">
 							<div class="input-group">
@@ -125,7 +175,7 @@
 							<input type="submit" value="Save" class="form-control btn btn-primary" id="saveDist">
 						</form>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 
@@ -163,6 +213,7 @@
 	<script src="js/script.js"></script>
 	<script src="js/angular/raceCtrl.js"></script>
 	<script src="js/angular/riderListCtrl.js"></script>
+	<script src="js/angular/recentResultCtrl.js"></script>
 
 	<!-- Google Tracking Code -->
 	<script>

@@ -39,7 +39,7 @@ $(document).ready(function(){
             totalTime: 0,
             totalDistance: 0
         };
-        
+
         socket.emit("newRider", info);
         socket.emit('riderList');
         socket.on('newRider', function(data){
@@ -86,5 +86,12 @@ $(document).ready(function(){
         localStore.distance = distance;
         localStorage.setItem('mtb_timing', JSON.stringify(localStore));
         e.preventDefault();
+    });
+
+    $("#newRider input").focusout(function(){
+        data = $(this).val();
+        if (data == null || data == "") {
+            $(this).parent().addClass('has-error');
+        }
     });
 });

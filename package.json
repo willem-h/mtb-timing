@@ -5,6 +5,7 @@
   "author": "Willem Handreck <whreck1972@live.com>",
   "dependencies": {
     "express": "^4.7.2",
+    "mysql": "^2.5.3",
     "socket.io": "^1.0.6"
   },
   "engines": {
