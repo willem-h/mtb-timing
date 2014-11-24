@@ -5,6 +5,7 @@ static/church/
 # Javascript files
 test.js
 server1.js
+database.js
 
 # HTML files
 static/fb.html
