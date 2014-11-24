@@ -59,10 +59,6 @@ $(document).ready(function(){
         e.preventDefault();
     });
 
-    $("#cancelNewRider").click(function(){
-        $("#newRider").trigger("reset");
-    });
-
     // Search riders
     $('#riderNum').keyup(function(e){
         $('#searchNum, #searchName, #searchCat').text("");
@@ -94,4 +90,35 @@ $(document).ready(function(){
             $(this).parent().addClass('has-error');
         }
     });
+
+    $('#newRiderButton').click(function(){
+        $('#riderList, #newRiderBox, .riderBoxHeading, #newRiderButton').toggleClass('hidden');
+    });
+
+    $('#newCategoryButton').click(function(){
+        $('#categoryList, #newCategoryBox, .categoryBoxHeading, #newCategoryButton').toggleClass('hidden');
+    });
+
+    $('#newTrackButton').click(function(){
+        $('#trackList, #newTrackBox, trackBoxHeading, #newTrackButton').toggleClass('hidden');
+    });
+
+    $("#cancelNewCategory").click(function(){
+        $("#newCategory").trigger("reset");
+        $('#newCategoryButton').click();
+    });
+
+    $("#cancelNewRider").click(function(){
+        $("#newRider").trigger("reset");
+        $('#newRiderButton').click();
+    });
+
+    $("#cancelNewTrack").click(function(){
+        $("#newTrack").trigger("reset");
+        $('#newTrackButton').click();
+    });
+
+    // For dev purposes
+    $('#trackToggle').click();
+    // $('#newTrackButton').click();
 });

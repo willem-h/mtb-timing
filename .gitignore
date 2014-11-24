@@ -1,4 +1,13 @@
+# Directories
 node_modules/
 static/church/
+
+# Javascript files
 test.js
+server1.js
+
+# HTML files
+static/fb.html
+
+# Log files
 npm-debug.log

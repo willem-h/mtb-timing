@@ -7,6 +7,8 @@
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="css/index.css">
+
+	<script src="js/jquery.js"></script>
 </head>
 <body ng-app="app">
 	<nav class="navbar navbar-default" role="navigation">
@@ -42,8 +44,8 @@
 	</nav>
 
 	<div id="content" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
-		<div id="raceControl" class="col-lg-6 col-md-6" ng-controller="raceCtrl">
-			<div>
+		<div id="raceControl" class="col-lg-6 col-md-6">
+			<div ng-controller="riderSearchCtrl">
 				<form role="form" id="riderNumForm">
 					<div class="form-group">
 						<label for="riderNum" hidden>Start Rider</label>
@@ -66,11 +68,11 @@
 			<br><br>
 			<ul class="nav nav-tabs" role="tablist">
 				<li class="active"><a href="#resultsBox" role="tab" data-toggle="tab">Recent Results</a></li>
-				<li><a href="#riderList" role="tab" data-toggle="tab">Riders</a></li>
-				<li><a href="#newRiderBox" role="tab" data-toggle="tab">New Rider</a></li>
+				<li><a href="#riders" role="tab" data-toggle="tab">Riders</a></li>
+				<!-- <li><a href="#newRiderBox" role="tab" data-toggle="tab">New Rider</a></li> -->
 				<!-- <li><a href="#lapDistBox" role="tab" data-toggle="tab">Lap Distance</a></li> -->
 				<li><a href="#categories" role="tab" data-toggle="tab">Categories</a></li>
-				<li><a href="#tracks" role="tab" data-toggle="tab">Tracks</a></li>
+				<li><a href="#tracks" role="tab" data-toggle="tab" id="trackToggle">Tracks</a></li>
 			</ul>
 
 			<!-- Tab panes -->
@@ -98,84 +100,151 @@
 							</table>
 					</div>
 				</div>
-				<div class="tab-pane" id="riderList">
-					<table class="table">
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Name</th>
-								<th>Category</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="x in riders">
-								<td>{{ x.number }}</td>
-								<td>{{ x.name }}</td>
-								<td>{{ x.category }}</td>
-							</tr>
-						</tbody>
-					</table>
+				<div class="tab-pane" id="riders">
+					<div class="col-lg-12">
+						<h2 class="riderBoxHeading col-lg-6" style="margin-top:0px;">Rider List</h2>
+						<h2 class="riderBoxHeading col-lg-6 hidden" style="margin-top:0px;">New Rider</h2>
+						<button id="newRiderButton" class="btn btn-primary pull-right">New Rider</button>
+					</div>
+
+					<div id="riderList">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Name</th>
+									<th>Category</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="x in riders">
+									<td>{{ x.number }}</td>
+									<td>{{ x.name }}</td>
+									<td>{{ x.category }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div id="newRiderBox" class="hidden">
+						<form role="form" id="newRider" class="col-lg-10 col-lg-offset-1">
+							<div class="form-group">
+								<label class="control-label" for="newName">Name</label>
+								<input type="text" class="form-control" id="newName" required>
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="newNum">Number</label>
+								<input type="number" class="form-control" id="newNum" required>
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="newCat">Category</label>
+								<!-- <input type="text" class="form-control" id="newCat"> -->
+								<select class="form-control" id="newCat" required>
+									<option ng-repeat="x in categories">{{ x.category }}</option>
+									<option></option>
+									<option>Male</option>
+									<option>Female</option>
+									<option>Junior Male</option>
+									<option>Junior Female</option>
+									<option>Double Open</option>
+								</select>
+							</div>
+							<button type="submit" class="btn btn-primary pull-right">Add Rider</button>
+							<button type="button" class="btn btn-default pull-right" id="cancelNewRider" style="margin-right:10px;">Cancel</button>
+						</form>
+					</div>
 				</div>
 				<div class="tab-pane" id="newRiderBox">
-					<form role="form" id="newRider" class="col-lg-10 col-lg-offset-1">
-						<div class="form-group">
-							<label class="control-label" for="newName">Name</label>
-							<input type="text" class="form-control" id="newName" required>
-						</div>
-						<div class="form-group">
-							<label class="control-label" for="newNum">Number</label>
-							<input type="number" class="form-control" id="newNum" required>
-						</div>
-						<div class="form-group">
-							<label class="control-label" for="newCat">Category</label>
-							<!-- <input type="text" class="form-control" id="newCat"> -->
-							<select class="form-control" id="newCat" required>
-								<option ng-repeat="x in categories">{{ x.category }}</option>
-								<option></option>
-								<option>Male</option>
-								<option>Female</option>
-								<option>Junior Male</option>
-								<option>Junior Female</option>
-								<option>Double Open</option>
-							</select>
-						</div>
-						<button type="submit" class="btn btn-primary pull-right">Add Rider</button>
-						<button type="button" class="btn btn-default pull-right" id="cancelNewRider" style="margin-right:10px;">Cancel</button>
-					</form>
+
 				</div>
 				<div class="tab-pane" id="categories">
-					<!-- <div class="col-lg-6 col-lg-offset-3 input-group">
-						<form id="lapDistForm" class="form-inline">
-							<div class="input-group">
-								<input id="lapDist" type="text" placeholder="0" class="form-control">
-								<span class="input-group-addon">km</span>
+					<div class="col-lg-12">
+						<h2 class="categoryBoxHeading col-lg-6" style="margin-top:0px;">Categories</h2>
+						<h2 class="categoryBoxHeading col-lg-6 hidden" style="margin-top:0px;">New Category</h2>
+						<button id="newCategoryButton" class="btn btn-primary pull-right">New Category</button>
+					</div>
+
+					<div id="categoryList">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Details</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="x in categories">
+									<td>{{ x.name }}</td>
+									<td>{{ x.details }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div id="newCategoryBox" class="hidden">
+						<form role="form" id="newCategory" class="col-lg-10 col-lg-offset-1">
+							<div class="form-group">
+								<label class="control-label" for="newCategoryName">Name</label>
+								<input type="text" class="form-control" id="newCategoryName" placeholder="Junior" required>
 							</div>
-							<input type="submit" value="Save" class="form-control btn btn-primary" id="saveDist">
+							<div class="form-group">
+								<label class="control-label" for="newCategoryDetails">Details</label>
+								<input type="text" class="form-control" id="newCategoryDetails" placeholder="People under the age of 18" required>
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="newCategoryTrack">Track</label>
+								<select class="form-control" id="newCategoryTrack" required>
+									<option ng-repeat="x in tracks">{{ x.track }}</option>
+									<option></option>
+									<option>Single Lap</option>
+									<option>Double Lap</option>
+									<option>Reverse Lap</option>
+								</select>
+							</div>
+							<button type="submit" class="btn btn-primary pull-right">Add Category</button>
+							<button type="button" class="btn btn-default pull-right" id="cancelNewCategory" style="margin-right:10px;">Cancel</button>
 						</form>
-					</div> -->
-				</div>
-				<div class="tab-pane" id="tracks">
-					<div class="col-lg-6 col-lg-offset-3 input-group">
-						<!-- <form id="lapDistForm" class="form-inline">
-							<div class="input-group">
-								<input id="lapDist" type="text" placeholder="0" class="form-control">
-								<span class="input-group-addon">km</span>
-							</div>
-							<input type="submit" value="Save" class="form-control btn btn-primary" id="saveDist">
-						</form> -->
 					</div>
 				</div>
-				<!-- <div class="tab-pane" id="lapDistBox">
-					<div class="col-lg-6 col-lg-offset-3 input-group">
-						<form id="lapDistForm" class="form-inline">
-							<div class="input-group">
-								<input id="lapDist" type="text" placeholder="0" class="form-control">
-								<span class="input-group-addon">km</span>
+				<div class="tab-pane" id="tracks" ng-controller="tracks">
+					<div class="col-lg-12">
+						<h2 class="trackBoxHeading col-lg-6" style="margin-top:0px;">Tracks</h2>
+						<h2 class="trackBoxHeading col-lg-6 hidden" style="margin-top:0px;">New Track</h2>
+						<button id="newTrackButton" class="btn btn-primary pull-right">New Track</button>
+					</div>
+
+					<div id="trackList">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Length</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="x in trackList">
+									<td>{{ x.name }}</td>
+									<td>{{ x.length }}m</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div id="newTrackBox" class="hidden">
+						<form role="form" id="newTrack" class="col-lg-10 col-lg-offset-1">
+							<div class="form-group">
+								<label class="control-label" for="newTrackName">Name</label>
+								<input type="text" class="form-control" ng-model="track.name" required>
 							</div>
-							<input type="submit" value="Save" class="form-control btn btn-primary" id="saveDist">
+							<div class="form-group">
+								<label class="control-label" for="newTrackDetails">Length</label>
+								<div class="input-group">
+									<input type="number" class="form-control" ng-model="track.length" required>
+									<span class="input-group-addon">metres</span>
+								</div>
+							</div>
+							<button type="submit" class="btn btn-primary pull-right" ng-click="newTrack()">Add Track</button>
+							<button type="button" class="btn btn-default pull-right" id="cancelNewTrack" style="margin-right:10px;">Cancel</button>
 						</form>
 					</div>
-				</div> -->
+				</div>
 			</div>
 		</div>
 
@@ -205,15 +274,15 @@
 
 	<script src="js/angular.js"></script>
 	<script src="js/angular/app.js"></script>
-	<script src="js/jquery.js"></script>
     <script src="bootstrap/js/dropdown.js"></script>
 	<script src="bootstrap/js/tab.js"></script>
 	<script src="js/socket.io.js"></script>
 	<script src="js/socket.js"></script>
 	<script src="js/script.js"></script>
-	<script src="js/angular/raceCtrl.js"></script>
+	<script src="js/angular/riderSearchCtrl.js"></script>
 	<script src="js/angular/riderListCtrl.js"></script>
 	<script src="js/angular/recentResultCtrl.js"></script>
+	<script src="js/angular/tracksCtrl.js"></script>
 
 	<!-- Google Tracking Code -->
 	<script>

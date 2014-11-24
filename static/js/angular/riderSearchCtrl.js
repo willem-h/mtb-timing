@@ -1,4 +1,4 @@
-app.controller('raceCtrl', function($scope){
+app.controller('riderSearchCtrl', function($scope){
     $scope.search = {};
     $scope.riders = {};
 
@@ -8,12 +8,9 @@ app.controller('raceCtrl', function($scope){
 
     socket.on('search', function(result){
         if (result) {
-            // result = result[0];
-            // console.log(result);
             $scope.search.number = result.number;
             $scope.search.name = result.name;
             $scope.search.category = result.category;
-            // $scope.search = "<td>"+ result.number +"</td><td>"+ result.name +"</td><td>"+ result.category +"</td>";
             $scope.$apply();
         } else {
             $scope.search.number = "";
