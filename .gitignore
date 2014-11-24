@@ -11,3 +11,6 @@ static/fb.html
 
 # Log files
 npm-debug.log
+
+# Text files
+dbdetails.txt
