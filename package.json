@@ -12,7 +12,7 @@
     "node": "0.10.x"
   },
   "scripts": {
-    "start": "npm start"
+    "start": "node server.js"
   },
   "main": "server.js",
   "devDependencies": {},
