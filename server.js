@@ -11,9 +11,9 @@ var mysql = require('mysql');
 app = express();
 
 // if (process.env.OPENSHIFT_NODEJS_IP) {
-    var mysqlhost = "mysql://"+ process.env.OPENSHIFT_MYSQL_DB_HOST +":"+ process.env.OPENSHIFT_MYSQL_DB_PORT +"/";
+    // var mysqlhost = "mysql://"+ process.env.OPENSHIFT_MYSQL_DB_HOST +":"+ process.env.OPENSHIFT_MYSQL_DB_PORT +"/";
     var db = mysql.createConnection({
-        host: mysqlhost,
+        host: process.env.OPENSHIFT_MYSQL_DB_HOST,
         user: "adminXA7JWLe",
         password: "VUxBgqAVh3Ry",
         database: "mtb"
