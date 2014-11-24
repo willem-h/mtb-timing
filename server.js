@@ -11,12 +11,12 @@ var mysql = require('mysql');
 app = express();
 
 // if (process.env.OPENSHIFT_NODEJS_IP) {
-//     var db = mysql.createConnection({
-//         host: "mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/",
-//         user: "adminXA7JWLe",
-//         password: "VUxBgqAVh3Ry",
-//         database: "mtb"
-//     });
+    var db = mysql.createConnection({
+        host: "mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/",
+        user: "adminXA7JWLe",
+        password: "VUxBgqAVh3Ry",
+        database: "mtb"
+    });
 // } else {
 //     var db = mysql.createConnection({
 //         host: "localhost",
@@ -27,7 +27,7 @@ app = express();
 // }
 
 // Connect to mysql database ready for use
-// db.connect();
+db.connect();
 
 // Make Express be server
 app.use(express.static(__dirname + '/static'));
