@@ -1,7 +1,7 @@
 // Setup requires
 var express = require('express');
 var app = express();
-var server = require('http').createServer(app);
+var server = require('http').Server(app);
 var io = require('socket.io');
 io = io(server);
 var mysql = require('mysql');
