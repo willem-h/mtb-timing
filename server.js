@@ -97,6 +97,7 @@ io.on('connection', function(socket){
 // });
 
 var port = Number(process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 5000);       // Openshift OR Heroku OR Local
-server.listen(port, function(){
+var ip = process.env.OPENSHIFT_NODEJS_IP || 127.0.0.1;
+server.listen(port, ip, function(){
     console.log("Listening on "+ port);
 });
