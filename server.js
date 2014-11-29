@@ -1,5 +1,5 @@
 var port = Number(process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 5000);       // Openshift OR Heroku OR Local
-var ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var ip = process.env.OPENSHIFT_NODEJS_IP || "192.168.1.3";
 
 // Setup requires
 var express = require('express');

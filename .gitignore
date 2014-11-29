@@ -5,6 +5,8 @@ static/church/
 # Javascript files
 test.js
 server1.js
+server2.js
+server3.js
 database.js
 
 # HTML files
