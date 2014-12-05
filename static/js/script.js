@@ -119,6 +119,6 @@ $(document).ready(function(){
     });
 
     // For dev purposes
-    $('#trackToggle').click();
+    // $('#trackToggle').click();
     // $('#newTrackButton').click();
 });

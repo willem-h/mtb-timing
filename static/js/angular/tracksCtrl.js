@@ -20,6 +20,7 @@ app.controller('tracks', function($scope){
             setTimeout(function(){
                 jquery('.noti').text('');
             },2500);
+            $scope.track = {};
         } else {
             jquery('.noti').toggleClass('notiSuccess notiError').text("Something's wrong");
             setTimeout(function(){

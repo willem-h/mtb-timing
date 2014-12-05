@@ -49,7 +49,7 @@
 				<form role="form" id="riderNumForm">
 					<div class="form-group">
 						<label for="riderNum" hidden>Start Rider</label>
-						<input type="number" class="form-control" id="riderNum" placeholder="Rider Number..." ng-model="input" ng-keyup="search.action" autofocus>
+						<input type="number" class="form-control" id="riderNum" placeholder="Rider Number..." ng-model="input" ng-keyup="search.action">
 					</div>
 					<button type="submit" class="btn btn-default" style="display:none">Submit</button>
 				</form>
@@ -231,16 +231,16 @@
 						<form role="form" id="newTrack" class="col-lg-10 col-lg-offset-1">
 							<div class="form-group">
 								<label class="control-label" for="newTrackName">Name</label>
-								<input type="text" class="form-control" ng-model="track.name" required>
+								<input id="newTrackName" type="text" class="form-control" ng-model="track.name" required>
 							</div>
 							<div class="form-group">
 								<label class="control-label" for="newTrackDetails">Length</label>
 								<div class="input-group">
-									<input type="number" class="form-control" ng-model="track.length" required>
+									<input id="newTrackLength" type="number" class="form-control" ng-model="track.length" required>
 									<span class="input-group-addon">metres</span>
 								</div>
 							</div>
-							<button type="submit" class="btn btn-primary pull-right" ng-click="newTrack()">Add Track</button>
+							<button type="submit" class="btn btn-primary pull-right" id="submitNewTrack" ng-click="newTrack()">Add Track</button>
 							<button type="button" class="btn btn-default pull-right" id="cancelNewTrack" style="margin-right:10px;">Cancel</button>
 						</form>
 					</div>
@@ -283,6 +283,9 @@
 	<script src="js/angular/riderListCtrl.js"></script>
 	<script src="js/angular/recentResultCtrl.js"></script>
 	<script src="js/angular/tracksCtrl.js"></script>
+
+	<!-- Testing -->
+	<script src="js/testing/forms.js"></script>
 
 	<!-- Google Tracking Code -->
 	<script>
