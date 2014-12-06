@@ -1,7 +1,3 @@
-function log (info) {
-    console.log(info);
-}
-
 var port = Number(process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 5000);       // Openshift OR Heroku OR Local
 var ip = process.env.OPENSHIFT_NODEJS_IP;
 
@@ -42,7 +38,7 @@ server.listen(port, ip, function(){
 
 io = require('socket.io').listen(server);
 io.on('connection', function(socket){
-    log("A user has connected");
+    console.log("A user has connected");
 
     function tracklist () {
         var searchQuery = "SELECT name, length FROM tracks";
@@ -80,7 +76,7 @@ io.on('connection', function(socket){
             socket.emit('tracklist');
         } else {
             socket.emit('newTrack', false);
-            log('New track failed: '+ track.name);
+            console.log('New track failed: '+ track.name);
         }
     });
 
@@ -100,15 +96,26 @@ io.on('connection', function(socket){
     });
 
     socket.on('categoryList', function(){
-        var searchQuery = "SELECT categories.name, categories.details,   FROM tracks";
+        var searchQuery = "SELECT categories.name, categories.parameters FROM categories";
         db.query(searchQuery, function(err, rows){
             if (err) {
                 throw err;
             } else {
-                socket.emit('trackList', rows);
+                socket.emit('categoryList', rows);
             }
         });
     });
+
+    socket.on('riderList', function(){
+        var searchQuery = "SELECT riders.rider_id, riders.name, riders.number, categories.name AS category_name FROM riders INNER JOIN categories ON riders.category_id=categories.category_id";
+        db.query(searchQuery, function(err, rows){
+            if (err) {
+                throw err;
+            } else {
+                socket.emit('riderList', rows);
+            }
+        });
+    })
 });
 
 // // Close database gracefully
