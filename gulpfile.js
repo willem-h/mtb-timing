@@ -9,7 +9,7 @@ var gulp = require('gulp'),
 
 // Scripts
 gulp.task('lint', function() {
-  return gulp.src('**/*.js')
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'));
+    return gulp.src('**/*.js')
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
 });
