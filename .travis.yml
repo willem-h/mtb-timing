@@ -1,15 +1,17 @@
 language: node_js
 node_js:
-- 0.1
+    - 0.1
+
 notifications:
-  slack: whacks:q8eJfblUkK1tHJbOk0nwFlzu
-  
+    slack: whacks:q8eJfblUkK1tHJbOk0nwFlzu
+    email: false
+
 deploy:
-  provider: openshift
-  user: whreck1972@live.com
-  password:
-    secure: QA45OscEuGiLGkwkqMVk7K2rD9NL9+Nm87Q0+Ri/CxG8cPtGojk/nPEqroEMliF4wftF0L46mJtjjKMnqHGJ/qg7DBvakK61H03xncPSgPrgiqBPHJ4A5TNl/+j7hE4FzbdbdSxMAfBvAZxlWDEpQxDOJc3EB0ByCh7gs6nJ9eo=
-  app: mtb
-  domain: willemh
-  on:
-    repo: willem-h/mtb-timing
+    provider: openshift
+    user: whreck1972@live.com
+    password:
+        secure: QA45OscEuGiLGkwkqMVk7K2rD9NL9+Nm87Q0+Ri/CxG8cPtGojk/nPEqroEMliF4wftF0L46mJtjjKMnqHGJ/qg7DBvakK61H03xncPSgPrgiqBPHJ4A5TNl/+j7hE4FzbdbdSxMAfBvAZxlWDEpQxDOJc3EB0ByCh7gs6nJ9eo=
+    app: mtb
+    domain: willemh
+    on:
+        repo: willem-h/mtb-timing
