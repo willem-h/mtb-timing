@@ -66,7 +66,7 @@ io.on('connection', function(socket){
             } else if (rows[0]) {
                 socket.emit('search', rows[0]);
             } else {
-                socket.emit('search', false)
+                socket.emit('search', false);
             }
         });
     });
