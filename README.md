@@ -4,6 +4,8 @@
 
 This system makes it easy to time riders laps.
 
+Check it out at http://mtb-willemh.rhcloud.com
+
 - Got bugs? Submit an [Issue](https://github.com/willem-h/mtb-timing/issues)
 - Got fixes? Make a [Pull request](https://github.com/willem-h/mtb-timing/pulls)
 - Got interest? Checkout the project on [Trello](https://trello.com/b/VoLG25rr/mtb-timing).
