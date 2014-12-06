@@ -13,10 +13,12 @@
   },
   "scripts": {
     "start": "node server.js",
-    "test": "jshint server.js"
+    "test": "gulp lint"
   },
   "main": "server.js",
   "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-jshint": "^1.9.0",
     "jshint": "^2.5.10"
   },
   "repository": {

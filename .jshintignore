@@ -1,0 +1,7 @@
+static/js/angular.js
+static/js/jquery.js
+static/js/socket.io.js
+static/bootstrap/
+
+bootstrap/
+node_modules/
