@@ -1,12 +1,11 @@
 # MTB Timing
-### Making timing for mountain bike events simple and easy
-###### Gee, I need a better name
+[![Build Status](https://travis-ci.org/willem-h/mtb-timing.svg?branch=master)](https://travis-ci.org/willem-h/mtb-timing)
+##### Mountain bike timing system for the [Warrnambool MTB Club](http://wmtbc.com.au) Dirt Crit series
 
-Countdown makes it easy to start riders,
-Results make it easy to see, well, the results
+This system makes it easy to time riders laps.
 
-Checkout the progress and things that need doing [on Trello](https://trello.com/b/VoLG25rr/mtb-timing).
+- Got bugs? Submit an [Issue](https://github.com/willem-h/mtb-timing/issues)
+- Got fixes? Make a [Pull request](https://github.com/willem-h/mtb-timing/pulls)
+- Got interest? Checkout the project on [Trello](https://trello.com/b/VoLG25rr/mtb-timing).
 
-
-#### Big Thanks To:
-* Michael Smith
+Find contributors [here](https://github.com/willem-h/mtb-timing/blob/master/CONTRIBUTORS.md)
