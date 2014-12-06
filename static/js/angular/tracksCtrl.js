@@ -21,6 +21,7 @@ app.controller('tracks', function($scope){
                 jquery('.noti').text('');
             },2500);
             $scope.track = {};
+            socket.emit('trackList');
         } else {
             jquery('.noti').toggleClass('notiSuccess notiError').text("Something's wrong");
             setTimeout(function(){
