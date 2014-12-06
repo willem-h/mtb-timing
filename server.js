@@ -57,7 +57,7 @@ io.on('connection', function(socket){
     }
 
     socket.on('search', function(query){
-        var query = Number(query);
+        query = Number(query);
 
         var searchQuery = "SELECT riders.rider_id AS number, riders.name, categories.name AS category FROM riders INNER JOIN categories ON riders.category_id=categories.category_id WHERE riders.rider_id='"+ db.escape(query) +"'";
         db.query(searchQuery, function(err, rows){
@@ -66,7 +66,7 @@ io.on('connection', function(socket){
             } else if (rows[0]) {
                 socket.emit('search', rows[0]);
             } else {
-                socket.emit('search', false);
+                socket.emit('search', false)
             }
         });
     });
@@ -77,13 +77,13 @@ io.on('connection', function(socket){
                 if (err) throw err;
             });
             socket.emit('newTrack', {bool:true, name:track.name});
-            socket.emit('tracklist')
+            socket.emit('tracklist');
         } else {
             socket.emit('newTrack', false);
             log('New track failed: '+ track.name);
         }
     });
-    
+
     socket.on('trackList', function(){
         socket.emit('trackList', tracklist());
     });
