@@ -1,6 +1,7 @@
 app.controller('categories', function($scope){
     $scope.category = {};
     $scope.categoryList = {};
+    $scope.trackList = {};
 
     socket.emit('categoryList');
 
@@ -31,6 +32,11 @@ app.controller('categories', function($scope){
 
     socket.on('categoryList', function(data){
         $scope.categoryList = data;
+        $scope.$apply();
+    });
+
+    socket.on('trackList', function (data) {
+        $scope.trackList = data;
         $scope.$apply();
     });
 });

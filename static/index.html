@@ -68,10 +68,10 @@
 			<br><br>
 			<ul class="nav nav-tabs" role="tablist">
 				<li class="active"><a href="#resultsBox" role="tab" data-toggle="tab">Recent Results</a></li>
-				<li><a href="#riders" role="tab" data-toggle="tab">Riders</a></li>
+				<li><a href="#riders" role="tab" data-toggle="tab" id="riderToggle">Riders</a></li>
 				<!-- <li><a href="#newRiderBox" role="tab" data-toggle="tab">New Rider</a></li> -->
 				<!-- <li><a href="#lapDistBox" role="tab" data-toggle="tab">Lap Distance</a></li> -->
-				<li><a href="#categories" role="tab" data-toggle="tab">Categories</a></li>
+				<li><a href="#categories" role="tab" data-toggle="tab" id="categoryToggle">Categories</a></li>
 				<li><a href="#tracks" role="tab" data-toggle="tab" id="trackToggle">Tracks</a></li>
 			</ul>
 
@@ -117,10 +117,10 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="x in riders">
+								<tr ng-repeat="x in riderList">
 									<td>{{ x.number }}</td>
 									<td>{{ x.name }}</td>
-									<td>{{ x.category }}</td>
+									<td>{{ x.category_name }}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -129,21 +129,21 @@
 						<form role="form" id="newRider" class="col-lg-10 col-lg-offset-1">
 							<div class="form-group">
 								<label class="control-label" for="newName">Name</label>
-								<input type="text" class="form-control" id="newName" placeholder="John Smith" required>
+								<input type="text" class="form-control" id="newName" placeholder="John Smith" ng-model="rider.name" required>
 							</div>
 							<div class="form-group">
 								<label class="control-label" for="newNum">Number</label>
-								<input type="number" class="form-control" id="newNum" required>
+								<input type="number" class="form-control" id="newNum" ng-model="rider.number" required>
 							</div>
 							<div class="form-group">
 								<label class="control-label" for="newCat">Category</label>
 								<!-- <input type="text" class="form-control" id="newCat"> -->
-								<select class="form-control" id="newCat" required>
+								<select class="form-control" id="newCat" ng-model="rider.category_id" required>
 									<option></option>
-									<option ng-repeat="x in categoryList">{{ x.name }}</option>
+									<option ng-repeat="x in categoryList" value="{{ x.category_id }}">{{ x.name }}</option>
 								</select>
 							</div>
-							<button type="submit" class="btn btn-primary pull-right">Add Rider</button>
+							<button type="submit" class="btn btn-primary pull-right" ng-click="newRider()">Add Rider</button>
 							<button type="button" class="btn btn-default pull-right" id="cancelNewRider" style="margin-right:10px;">Cancel</button>
 						</form>
 					</div>
@@ -151,7 +151,8 @@
 				<div class="tab-pane" id="newRiderBox">
 
 				</div>
-				<div class="tab-pane" id="categories">
+
+				<div class="tab-pane" id="categories" ng-controller="categories">
 					<div class="col-lg-12">
 						<h2 class="categoryBoxHeading col-lg-6" style="margin-top:0px;">Categories</h2>
 						<h2 class="categoryBoxHeading col-lg-6 hidden" style="margin-top:0px;">New Category</h2>
@@ -167,9 +168,9 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="x in categories">
+								<tr ng-repeat="x in categoryList">
 									<td>{{ x.name }}</td>
-									<td>{{ x.details }}</td>
+									<td>{{ x.parameters }}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -178,27 +179,24 @@
 						<form role="form" id="newCategory" class="col-lg-10 col-lg-offset-1">
 							<div class="form-group">
 								<label class="control-label" for="newCategoryName">Name</label>
-								<input type="text" class="form-control" id="newCategoryName" placeholder="Junior" required>
+								<input type="text" class="form-control" id="newCategoryName" ng-model="category.name" placeholder="Junior" required>
 							</div>
 							<div class="form-group">
 								<label class="control-label" for="newCategoryDetails">Details</label>
-								<input type="text" class="form-control" id="newCategoryDetails" placeholder="People under the age of 18" required>
+								<input type="text" class="form-control" id="newCategoryDetails" ng-model="category.parameters" placeholder="People under the age of 18" required>
 							</div>
 							<div class="form-group">
 								<label class="control-label" for="newCategoryTrack">Track</label>
-								<select class="form-control" id="newCategoryTrack" required>
-									<option ng-repeat="x in tracks">{{ x.track }}</option>
-									<option></option>
-									<option>Single Lap</option>
-									<option>Double Lap</option>
-									<option>Reverse Lap</option>
+								<select class="form-control" id="newCategoryTrack" ng-model="category.track_id" required>
+									<option ng-repeat="x in trackList" value="{{ x.id }}">{{ x.name }} - {{ x.length }}m</option>
 								</select>
 							</div>
-							<button type="submit" class="btn btn-primary pull-right">Add Category</button>
+							<button type="submit" class="btn btn-primary pull-right" ng-click="newCategory()">Add Category</button>
 							<button type="button" class="btn btn-default pull-right" id="cancelNewCategory" style="margin-right:10px;">Cancel</button>
 						</form>
 					</div>
 				</div>
+
 				<div class="tab-pane" id="tracks" ng-controller="tracks">
 					<div class="col-lg-12">
 						<h2 class="trackBoxHeading col-lg-6" style="margin-top:0px;">Tracks</h2>

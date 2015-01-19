@@ -41,7 +41,7 @@ $(document).ready(function(){
         };
 
         socket.emit("newRider", info);
-        socket.emit('riderList');
+        // socket.emit('riderList');
         socket.on('newRider', function(data){
             if (data.name) {
                 $(".noti").text(data.name +" added successfully");
@@ -121,4 +121,10 @@ $(document).ready(function(){
     // For dev purposes
     // $('#trackToggle').click();
     // $('#newTrackButton').click();
+
+    // $('#categoryToggle').click();
+    // $('#newCategoryButton').click();
+
+    $('#riderToggle').click();
+    $('#newRiderButton').click();
 });

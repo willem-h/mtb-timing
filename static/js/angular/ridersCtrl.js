@@ -1,41 +1,28 @@
 app.controller('riders', function($scope){
+    $scope.riderList = {};
     $scope.category = {};
     $scope.categoryList = {};
 
-    socket.emit('categoryList');
     socket.emit('riderList');
 
-    // $scope.newCategory = function() {
-    //     data = {
-    //         category_id: null,
-    //         name: $scope.category.name,
-    //         parameters: $scope.category.parameters,
-    //         track_id: $scope.category.track_id
-    //     };
-    //     socket.emit('newCategory', data);
-    // };
-    //
-    // socket.on('newCategory', function(data){
-    //     if (data.bool) {
-    //         jquery('.noti').text(data.name +' was added to Categories');
-    //         jquery('#cancelNewCategory').click();
-    //         setTimeout(function(){
-    //             jquery('.noti').text('');
-    //         },2500);
-    //     } else {
-    //         jquery('.noti').toggleClass('notiSuccess notiError').text("Something's wrong");
-    //         setTimeout(function(){
-    //             jquery('.noti').toggleClass('notiSuccess notiError').text('');
-    //         },2500);
-    //     }
-    // });
+    $scope.newRider = function() {
+        data = {
+            rider_id: null,
+            name: $scope.rider.name,
+            number: $scope.rider.number,
+            category_id: $scope.rider.category_id
+        };
+        socket.emit('newRider', data);
+    };
+
+    socket.on('riderList', function(data){
+        console.log(data);
+        $scope.riderList = data;
+        $scope.$apply();
+    });
 
     socket.on('categoryList', function(data){
         $scope.categoryList = data;
         $scope.$apply();
-    });
-
-    socket.on('riderList', function(data){
-        console.log(data);
     });
 });

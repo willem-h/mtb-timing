@@ -21,7 +21,7 @@ if (process.env.OPENSHIFT_NODEJS_IP) {
     var db = mysql.createConnection({
         host: "localhost",
         user: "root",
-        password: "W_hreck",
+        password: "ServerSQL",
         database: "mtb_node"
     });
 }
@@ -41,7 +41,7 @@ io.on('connection', function(socket){
     console.log("A user has connected");
 
     function tracklist () {
-        var searchQuery = "SELECT name, length FROM tracks";
+        var searchQuery = "SELECT track_id AS id, name, length FROM tracks";
         db.query(searchQuery, function(err, rows){
             if (err) {
                 throw err;
@@ -95,8 +95,19 @@ io.on('connection', function(socket){
         }
     });
 
+    socket.on('newRider', function(rider){
+        if (!isNaN(rider.rider_id)) {
+            db.query('INSERT INTO riders SET ?', rider, function(err, result){
+                if (err) throw err;
+            });
+            socket.emit('newRider', {bool:true, name:rider.name});
+        } else {
+            socket.emit('newRider', false);
+        }
+    });
+
     socket.on('categoryList', function(){
-        var searchQuery = "SELECT categories.name, categories.parameters FROM categories";
+        var searchQuery = "SELECT categories.category_id, categories.name, categories.parameters FROM categories";
         db.query(searchQuery, function(err, rows){
             if (err) {
                 throw err;
@@ -115,7 +126,16 @@ io.on('connection', function(socket){
                 socket.emit('riderList', rows);
             }
         });
-    })
+    });
+
+    var searchQuery = "SELECT riders.rider_id, riders.name, riders.number, categories.name AS category_name FROM riders INNER JOIN categories ON riders.category_id=categories.category_id";
+    db.query(searchQuery, function(err, rows){
+        if (err) {
+            throw err;
+        } else {
+            console.log(JSON.stringify(rows));
+        }
+    });
 });
 
 // // Close database gracefully
