@@ -3,6 +3,7 @@ app.controller('overallResultCtrl', function($scope){
     socket.emit('overallList');
 
     socket.on('overallList', function(data){
+        console.log(data);
         // Make seconds into minutes and seconds
         for (var i=0; i<data.length; i++) {
             // Work out lap time

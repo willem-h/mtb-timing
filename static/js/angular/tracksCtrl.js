@@ -28,10 +28,20 @@ app.controller('tracks', function($scope){
                 jquery('.noti').toggleClass('notiSuccess notiError').text('');
             },2500);
         }
+        socket.emit('trackList');
     });
 
     socket.on('trackList', function(data){
         $scope.trackList = data;
         $scope.$apply();
+    });
+
+    angular.element('#newTrackButton').click(function(){
+        angular.element('#trackList, #newTrackBox, trackBoxHeading, #newTrackButton').toggleClass('hidden');
+    });
+
+    angular.element("#cancelNewTrack").click(function(){
+        angular.element("#newTrack").trigger("reset");
+        angular.element('#newTrackButton').click();
     });
 });

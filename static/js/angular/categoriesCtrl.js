@@ -28,6 +28,7 @@ app.controller('categories', function($scope){
                 jquery('.noti').toggleClass('notiSuccess notiError').text('');
             },2500);
         }
+        socket.emit('categoryList');
     });
 
     socket.on('categoryList', function(data){
@@ -38,5 +39,14 @@ app.controller('categories', function($scope){
     socket.on('trackList', function (data) {
         $scope.trackList = data;
         $scope.$apply();
+    });
+
+    angular.element('#newCategoryButton').click(function(){
+        angular.element('#categoryList, #newCategoryBox, .categoryBoxHeading, #newCategoryButton').toggleClass('hidden');
+    });
+
+    angular.element("#cancelNewCategory").click(function(){
+        angular.element("#newCategory").trigger("reset");
+        angular.element('#newCategoryButton').click();
     });
 });

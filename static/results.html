@@ -25,30 +25,22 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><a href="./">Control</a></li>
-                <li><a href="./countdown.html">Countdown</a></li>
-                <!-- <li class="active"><a href="./results.html">Results</a></li> -->
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Results <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="results.html">Summary <span class="glyphicon glyphicon-th pull-right"></span></a></li>
-                        <li class="divider"></li>
-                        <li><a href="handicaps.html">Handicaps</a></li>
-                    </ul>
-                </li>
+                <li class="active"><a href="./results.html">Results</a></li>
+                <li><a href="./handicaps.html">Handicaps</a></li>
             </ul>
             <p class="navbar-text navbar-right noti notiSuccess"></p>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
 
-    <div id="content">
+    <div id="content" ng-controller="resultCtrl">
         <!-- Overall -->
         <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Overall Placings</h3>
                 </div>
-                <table class="table" ng-controller="overallResultCtrl">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Rank</th>
@@ -77,7 +69,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Male Overall Placings</h3>
                 </div>
-                <table class="table" ng-controller="maleOverallResultCtrl">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Rank</th>
@@ -88,13 +80,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="x in maleOverall">
+                        <!-- <tr ng-repeat="x in maleOverall">
                             <td>{{ x.rank }}</td>
                             <td>{{ x.number }}</td>
                             <td>{{ x.name }}</td>
                             <td>{{ x.category }}</td>
                             <td>{{ x.time }}</td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -106,14 +98,13 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Active Riders</h3>
                 </div>
-                <table class="table" ng-controller="activeResultCtrl">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Name</th>
                             <th>Category</th>
                             <th>Time</th>
-                            <th>ETA</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -122,7 +113,6 @@
                             <td>{{ x.name }}</td>
                             <td>{{ x.category }}</td>
                             <td>{{ x.time }}</td>
-                            <td>{{ x.etaTime }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -135,7 +125,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Female Overall Placings</h3>
                 </div>
-                <table class="table" ng-controller="femaleOverallResultCtrl">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Rank</th>
@@ -146,13 +136,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="x in femaleOverall">
+                        <!-- <tr ng-repeat="x in femaleOverall">
                             <td>{{ x.rank }}</td>
                             <td>{{ x.number }}</td>
                             <td>{{ x.name }}</td>
                             <td>{{ x.category }}</td>
                             <td>{{ x.time }}</td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -164,7 +154,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Recent</h3>
                 </div>
-                <table class="table" ng-controller="recentResultCtrl">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -194,12 +184,7 @@
     <script src="js/socket.io.js"></script>
     <script src="js/socket.js"></script>
     <script src="js/script.js"></script>
-    <script src="js/results.js"></script>
-    <script src="js/angular/activeResultCtrl.js"></script>
-    <script src="js/angular/recentResultCtrl.js"></script>
-    <script src="js/angular/overallResultCtrl.js"></script>
-    <script src="js/angular/maleOverallResultCtrl.js"></script>
-    <script src="js/angular/femaleOverallResultCtrl.js"></script>
+    <script src="js/angular/resultCtrl.js"></script>
 
     <!-- Google Tracking Code -->
     <script>

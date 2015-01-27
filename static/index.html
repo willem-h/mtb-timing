@@ -28,15 +28,8 @@
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 				<li class="active"><a href="./">Control</a></li>
-				<li><a href="./countdown.html">Countdown</a></li>
-				<li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Results <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="results.html">Summary <span class="glyphicon glyphicon-th pull-right"></span></a></li>
-                        <li class="divider"></li>
-                        <li><a href="handicaps.html">Handicaps</a></li>
-                    </ul>
-                </li>
+				<li><a href="./results.html">Results</a></li>
+				<li><a href="./handicaps.html">Handicaps</a></li>
 			</ul>
 			<p class="navbar-text navbar-right noti notiSuccess"></p>
 			</div><!-- /.navbar-collapse -->
@@ -46,10 +39,10 @@
 	<div id="content" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
 		<div id="raceControl" class="col-lg-6 col-md-6">
 			<div ng-controller="riderSearchCtrl">
-				<form role="form" id="riderNumForm">
+				<form role="form" id="riderNumForm" ng-submit="time.submit()">
 					<div class="form-group">
 						<label for="riderNum" hidden>Start Rider</label>
-						<input type="number" class="form-control" id="riderNum" placeholder="Rider Number..." ng-model="input" ng-keyup="search.action">
+						<input type="number" class="form-control" id="riderNum" placeholder="Rider Number..." ng-model="submit.number" ng-keyup="search.action" autofocus>
 					</div>
 					<button type="submit" class="btn btn-default" style="display:none">Submit</button>
 				</form>
@@ -69,8 +62,6 @@
 			<ul class="nav nav-tabs" role="tablist">
 				<li class="active"><a href="#resultsBox" role="tab" data-toggle="tab">Recent Results</a></li>
 				<li><a href="#riders" role="tab" data-toggle="tab" id="riderToggle">Riders</a></li>
-				<!-- <li><a href="#newRiderBox" role="tab" data-toggle="tab">New Rider</a></li> -->
-				<!-- <li><a href="#lapDistBox" role="tab" data-toggle="tab">Lap Distance</a></li> -->
 				<li><a href="#categories" role="tab" data-toggle="tab" id="categoryToggle">Categories</a></li>
 				<li><a href="#tracks" role="tab" data-toggle="tab" id="trackToggle">Tracks</a></li>
 			</ul>
@@ -104,7 +95,7 @@
 					<div class="col-lg-12">
 						<h2 class="riderBoxHeading col-lg-6" style="margin-top:0px;">Rider List</h2>
 						<h2 class="riderBoxHeading col-lg-6 hidden" style="margin-top:0px;">New Rider</h2>
-						<button id="newRiderButton" class="btn btn-primary pull-right">New Rider</button>
+						<button id="newRiderButton" ng-click="getNumbers()" class="btn btn-primary pull-right">New Rider</button>
 					</div>
 
 					<div id="riderList">
@@ -131,9 +122,9 @@
 								<label class="control-label" for="newName">Name</label>
 								<input type="text" class="form-control" id="newName" placeholder="John Smith" ng-model="rider.name" required>
 							</div>
-							<div class="form-group">
+							<div class="form-group" id="newNumDiv">
 								<label class="control-label" for="newNum">Number</label>
-								<input type="number" class="form-control" id="newNum" ng-model="rider.number" required>
+								<input type="number" class="form-control" id="newNum" ng-focus="getNumbers()" ng-keyup="riderNumberValid()" ng-model="rider.number" required>
 							</div>
 							<div class="form-group">
 								<label class="control-label" for="newCat">Category</label>
@@ -147,9 +138,6 @@
 							<button type="button" class="btn btn-default pull-right" id="cancelNewRider" style="margin-right:10px;">Cancel</button>
 						</form>
 					</div>
-				</div>
-				<div class="tab-pane" id="newRiderBox">
-
 				</div>
 
 				<div class="tab-pane" id="categories" ng-controller="categories">
@@ -249,7 +237,6 @@
 						<th>Name</th>
 						<th>Category</th>
 						<th>Time</th>
-						<th>ETA</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -258,7 +245,6 @@
 						<td>{{ x.name }}</td>
 						<td>{{ x.category }}</td>
 						<td>{{ x.time }}</td>
-						<td>{{ x.etaTime }}</td>
 					</tr>
 				</tbody>
 			</table>

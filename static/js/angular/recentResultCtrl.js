@@ -3,14 +3,12 @@ app.controller('recentResultCtrl', function($scope){
     socket.emit('recentList');
 
     socket.on('recentList', function(data){
-        // console.log(data);
-        data = data.reverse();
-
         // Make seconds into minutes and seconds
         for (var i=0; i<data.length; i++) {
             // Work out lap time
             var negativeSign = "";
-            var time = data[i].laps[data[i].laps.length - 1].end - data[i].laps[data[i].laps.length - 1].start;
+            // var time = data[i].laps[data[i].laps.length - 1].end - data[i].laps[data[i].laps.length - 1].start;
+            var time = data[i].endtime - data[i].starttime;
             var mins = addZeros(Math.abs(Math.floor(time/60)));
             var secs = addZeros(Math.abs(time%60));
             if (time < 0) {

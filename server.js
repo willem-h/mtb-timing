@@ -37,6 +37,20 @@ server.listen(port, ip, function(){
 });
 
 io = require('socket.io').listen(server);
+
+function activeList (data) {
+    // console.log("Current riders requested");
+
+    var searchQuery = "SELECT riders.number, riders.name, categories.name AS category, laps.start_time AS starttime FROM laps JOIN riders ON laps.rider_id=riders.rider_id JOIN categories ON riders.category_id=categories.category_id WHERE end_time=0 ORDER BY laps.lap_id ASC";
+    db.query(searchQuery, function(err, rows){
+        if (err) {
+            throw err;
+        } else {
+            io.emit('activeList', rows);
+        }
+    });
+}
+
 io.on('connection', function(socket){
     console.log("A user has connected");
 
@@ -55,7 +69,7 @@ io.on('connection', function(socket){
     socket.on('search', function(query){
         query = Number(query);
 
-        var searchQuery = "SELECT riders.rider_id AS number, riders.name, categories.name AS category FROM riders INNER JOIN categories ON riders.category_id=categories.category_id WHERE riders.rider_id='"+ db.escape(query) +"'";
+        var searchQuery = "SELECT riders.rider_id AS id, riders.name, riders.number, categories.name AS category FROM riders INNER JOIN categories ON riders.category_id=categories.category_id WHERE riders.number='"+ db.escape(query) +"'";
         db.query(searchQuery, function(err, rows){
             if (err) {
                 throw err;
@@ -97,6 +111,7 @@ io.on('connection', function(socket){
 
     socket.on('newRider', function(rider){
         if (!isNaN(rider.rider_id)) {
+            console.log(JSON.stringify(rider));
             db.query('INSERT INTO riders SET ?', rider, function(err, result){
                 if (err) throw err;
             });
@@ -128,15 +143,71 @@ io.on('connection', function(socket){
         });
     });
 
-    var searchQuery = "SELECT riders.rider_id, riders.name, riders.number, categories.name AS category_name FROM riders INNER JOIN categories ON riders.category_id=categories.category_id";
-    db.query(searchQuery, function(err, rows){
-        if (err) {
-            throw err;
-        } else {
-            console.log(JSON.stringify(rows));
-        }
+    socket.on('recentList', function () {
+        var searchQuery = "SELECT riders.number, riders.name, categories.name AS category, laps.start_time AS starttime, laps.end_time AS endtime FROM laps JOIN riders ON laps.rider_id=riders.rider_id JOIN categories ON riders.category_id=categories.category_id WHERE laps.end_time>0 ORDER BY laps.end_time DESC";
+        db.query(searchQuery, function(err, rows){
+            if (err) {
+                throw err;
+            } else {
+                socket.emit('recentList', rows);
+            }
+        });
+    });
+
+    socket.on('overallList', function () {
+        // var searchQuery = "SELECT DISTINCT riders.number, riders.name, categories.name AS category, laps.start_time AS starttime, laps.end_time AS endtime FROM laps JOIN riders ON laps.rider_id=riders.rider_id JOIN categories ON riders.category_id=categories.category_id WHERE end_time>0 GROUP BY riders.rider_id ORDER BY end_time-start_time ASC";
+        var searchQuery = "SELECT DISTINCT riders.number, riders.name, categories.name AS category, laps.start_time AS starttime, laps.end_time AS endtime FROM laps JOIN riders ON laps.rider_id=riders.rider_id JOIN categories ON riders.category_id=categories.category_id WHERE end_time>0 ORDER BY end_time-start_time ASC";
+        db.query(searchQuery, function(err, rows){
+            if (err) {
+                throw err;
+            } else {
+                socket.emit('overallList', rows);
+                // console.log(rows);
+            }
+        });
+    });
+
+    socket.on('timeRider', function (rider) {
+        var searchQuery = "SELECT laps.end_time AS endtime FROM laps JOIN riders ON laps.rider_id=riders.rider_id WHERE riders.rider_id=? ORDER BY laps.lap_id DESC";
+        db.query(searchQuery, rider, function(err, rows){
+            if (err) {
+                throw err;
+            } else {
+                if (rows[0] && rows[0].endtime === 0) {
+                    db.query('UPDATE laps SET end_time='+ Date.now()/1000 +' WHERE rider_id='+ rider +' AND end_time=0', function (err, result) {
+                        if (err) throw err;
+                    });
+                } else {
+                    console.log(Date.now() +" time");
+
+                    data = {
+                        lap_id: null,
+                        rider_id: rider,
+                        date: null,
+                        start_time: Date.now()/1000
+                    };
+
+                    db.query('INSERT INTO laps SET ?', data, function(err, result){
+                        if (err) throw err;
+
+                        var searchQuery = "SELECT * FROM laps WHERE lap_id='"+ db.escape(result.insertId) +"'";
+                        db.query(searchQuery, function(err, rows){
+                            if (err) {
+                                throw err;
+                            } else {
+                                socket.emit('startRider', rows);
+                            }
+                        });
+                    });
+                }
+            }
+        });
     });
 });
+
+setInterval(function(){
+    activeList();
+},500);
 
 // // Close database gracefully
 // db.end(function(err){
