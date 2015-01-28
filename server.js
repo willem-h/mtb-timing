@@ -155,8 +155,8 @@ io.on('connection', function(socket){
     });
 
     socket.on('overallList', function () {
-        // var searchQuery = "SELECT DISTINCT riders.number, riders.name, categories.name AS category, laps.start_time AS starttime, laps.end_time AS endtime FROM laps JOIN riders ON laps.rider_id=riders.rider_id JOIN categories ON riders.category_id=categories.category_id WHERE end_time>0 GROUP BY riders.rider_id ORDER BY end_time-start_time ASC";
-        var searchQuery = "SELECT DISTINCT riders.number, riders.name, categories.name AS category, laps.start_time AS starttime, laps.end_time AS endtime FROM laps JOIN riders ON laps.rider_id=riders.rider_id JOIN categories ON riders.category_id=categories.category_id WHERE end_time>0 ORDER BY end_time-start_time ASC";
+        var searchQuery = "SELECT DISTINCT riders.number, riders.name, categories.name AS category, MIN(laps.end_time-laps.start_time) AS time, laps.start_time AS starttime, laps.end_time AS endtime FROM laps JOIN riders ON laps.rider_id=riders.rider_id JOIN categories ON riders.category_id=categories.category_id WHERE end_time>0 GROUP BY laps.rider_id ORDER BY time ASC";
+        // var searchQuery = "SELECT DISTINCT riders.number, riders.name, categories.name AS category, laps.start_time AS starttime, laps.end_time AS endtime FROM laps JOIN riders ON laps.rider_id=riders.rider_id JOIN categories ON riders.category_id=categories.category_id WHERE end_time>0 ORDER BY end_time-start_time ASC";
         db.query(searchQuery, function(err, rows){
             if (err) {
                 throw err;
@@ -167,7 +167,6 @@ io.on('connection', function(socket){
     });
 
     socket.on('handicapList', function () {
-        console.log('request handicaps');
         var searchQuery = "SELECT riders.number, riders.name, categories.name AS category, SUM(tracks.length)/SUM(laps.end_time-laps.start_time) AS avgspeed FROM laps JOIN riders ON laps.rider_id=riders.rider_id JOIN categories ON riders.category_id=categories.category_id JOIN tracks ON categories.track_id=tracks.track_id WHERE end_time>0 GROUP BY laps.rider_id ORDER BY avgspeed DESC;";
         db.query(searchQuery, function(err, rows){
             if (err) {
@@ -187,6 +186,7 @@ io.on('connection', function(socket){
                 if (rows[0] && rows[0].endtime === 0) {
                     db.query('UPDATE laps SET end_time='+ Date.now()/1000 +' WHERE rider_id='+ rider +' AND end_time=0', function (err, result) {
                         if (err) throw err;
+                        socket.emit('finishedRider');
                     });
                 } else {
                     console.log(Date.now() +" time");

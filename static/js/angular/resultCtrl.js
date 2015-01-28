@@ -47,7 +47,6 @@ app.controller('resultCtrl', function($scope){
     socket.on('activeList', function(data){
         for (var i=0; i<data.length; i++) {
             data[i].time = time(data[i].starttime, Math.floor(Date.now()/1000));
-            data[i].rank = i+1;
         }
 
         socket.emit('overallList');
@@ -55,6 +54,10 @@ app.controller('resultCtrl', function($scope){
 
         $scope.active = elementReduce(data, 5);
         $scope.$apply();
+    });
+
+    socket.on('finishedRider', function () {
+        socket.emit('recentList');
     });
 
     socket.on('recentList', function(data){
@@ -68,7 +71,8 @@ app.controller('resultCtrl', function($scope){
 
     socket.on('overallList', function(data){
         for (var i=0; i<data.length; i++) {
-            data[i].time = time(data[i].starttime, data[i].endtime);
+            data[i].time = time(data[i].starttime, data[i].starttime + data[i].time);
+            data[i].rank = i+1;
         }
 
         $scope.overall = elementReduce(data, 13);
