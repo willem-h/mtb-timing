@@ -162,7 +162,18 @@ io.on('connection', function(socket){
                 throw err;
             } else {
                 socket.emit('overallList', rows);
-                // console.log(rows);
+            }
+        });
+    });
+
+    socket.on('handicapList', function () {
+        console.log('request handicaps');
+        var searchQuery = "SELECT riders.number, riders.name, categories.name AS category, SUM(tracks.length)/SUM(laps.end_time-laps.start_time) AS avgspeed FROM laps JOIN riders ON laps.rider_id=riders.rider_id JOIN categories ON riders.category_id=categories.category_id JOIN tracks ON categories.track_id=tracks.track_id WHERE end_time>0 GROUP BY laps.rider_id ORDER BY avgspeed DESC;";
+        db.query(searchQuery, function(err, rows){
+            if (err) {
+                throw err;
+            } else {
+                socket.emit('handicapList', rows);
             }
         });
     });

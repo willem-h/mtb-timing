@@ -47,9 +47,11 @@ app.controller('resultCtrl', function($scope){
     socket.on('activeList', function(data){
         for (var i=0; i<data.length; i++) {
             data[i].time = time(data[i].starttime, Math.floor(Date.now()/1000));
+            data[i].rank = i+1;
         }
 
         socket.emit('overallList');
+        socket.emit('handicapList');
 
         $scope.active = elementReduce(data, 5);
         $scope.$apply();

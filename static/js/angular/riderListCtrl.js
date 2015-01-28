@@ -7,7 +7,7 @@ app.controller('riderListCtrl', function($scope){
             // Work out lap time
             var negativeSign = "";
             starttime = Date.parse(data[i].starttime);
-            var time = Math.floor(Date.now()/1000) - Date.parse(data[i].starttime)/1000;
+            var time = Math.floor(Date.now()/1000) - data[i].starttime;
             var mins = addZeros(Math.abs(Math.floor(time/60)));
             var secs = addZeros(Math.abs(time%60));
             if (time < 0) {

@@ -38,6 +38,13 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Handicaps</h3>
+                    <form id="form" class="col-md-6 col-md-offset-6" style="margin-top:-25px">
+                        <div class="input-group">
+                            <input class="form-control" id="length" type="number" ng-keyup="recalc()" ng-model="handiLength" ng-init="handiLength=5000">
+                            <span class="input-group-addon">metres</span>
+                        </div>
+                        <input type="submit" class="sr-only">
+                    </form>
                 </div>
                 <table class="table" ng-controller="handicapCtrl">
                     <thead>
@@ -46,7 +53,7 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Category</th>
-                            <th>Time</th>
+                            <th>Calc. Time</th>
                             <th>Offset</th>
                         </tr>
                     </thead>
@@ -56,7 +63,7 @@
                             <td>{{ x.number }}</td>
                             <td>{{ x.name }}</td>
                             <td>{{ x.category }}</td>
-                            <td>{{ x.time }}</td>
+                            <td>{{ x.esttime }}</td>
                             <td>{{ '+' + x.offset }}</td>
                         </tr>
                     </tbody>
@@ -65,9 +72,9 @@
         </div>
     </div>
 
+    <script src="js/jquery.js"></script>
     <script src="js/angular.js"></script>
     <script src="js/angular/app.js"></script>
-    <script src="js/jquery.js"></script>
     <script src="bootstrap/js/dropdown.js"></script>
     <script src="js/socket.io.js"></script>
     <script src="js/socket.js"></script>
