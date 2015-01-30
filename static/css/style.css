@@ -9,3 +9,10 @@
 .notiSuccess {
 	color: green !important;
 }
+
+.brand {
+	height: 51px;
+	margin-left: -16px;
+	margin-top: -20px;
+	margin-bottom: -16px;
+}
