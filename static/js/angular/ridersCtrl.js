@@ -53,6 +53,13 @@ app.controller('riders', function($scope){
         socket.emit('riderList');
     };
 
+    $scope.deleteRider = function (id) {
+        var d = confirm("You are deleting a rider along with all their data");
+        if (d) {
+            socket.emit('deleteRider', id);
+        }
+    };
+
     angular.element("#newRider input").focusout(function(){
         data = angular.element(this).val();
         if (data == null || data == "") {

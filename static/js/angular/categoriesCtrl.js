@@ -15,6 +15,13 @@ app.controller('categories', function($scope){
         socket.emit('newCategory', data);
     };
 
+    $scope.deleteCategory = function (id) {
+        var d = confirm("You are deleting a category");
+        if (d) {
+            socket.emit('deleteCategory', id);
+        }
+    };
+
     socket.on('newCategory', function(data){
         if (data.bool) {
             jquery('.noti').text(data.name +' was added to Categories');

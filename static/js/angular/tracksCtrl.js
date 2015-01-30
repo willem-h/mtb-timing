@@ -13,6 +13,13 @@ app.controller('tracks', function($scope){
         socket.emit('newTrack', data);
     };
 
+    $scope.deleteTrack = function (id) {
+        var d = confirm("You are deleting a track");
+        if (d) {
+            socket.emit('deleteTrack', id);
+        }
+    };
+
     socket.on('newTrack', function(data){
         if (data.bool) {
             jquery('.noti').text(data.name +' was added to Tracks');

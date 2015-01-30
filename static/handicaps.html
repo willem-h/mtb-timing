@@ -3,7 +3,7 @@
 <head>
     <link rel="shortcut icon" href="/mountain.png" type="image/png">
     <link rel="icon" href="/mountain.png" type="image/png">
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>MTB Timing</title>
 
@@ -37,17 +37,36 @@
     </nav>
 
     <div id="content">
-        <div class="col-lg-6 col-lg-offset-3">
+        <div class="col-lg-3 col-lg-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form id="form" class="form form-inline">
+                        <div class="form-group">
+                            <label for="length">Race length</label>
+                            <div class="input-group">
+                                <input class="form-control" id="length" type="number" ng-change="recalc()" ng-model="handiLength" ng-init="handiLength=5000">
+                                <span class="input-group-addon">metres</span>
+                            </div>
+                        </div>
+                    </form><br>
+
+                    <form id="form" class="form">
+                        <div class="form-group">
+                            <label for="order">List order</label>
+                            <select class="form-control" ng-change="recalc()" ng-model="slowest" ng-init="slowest=0">
+                                <option value="0">Fastest - Slowest</option>
+                                <option value="1">Slowest - Fastest</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Handicaps</h3>
-                    <form id="form" class="col-md-6 col-md-offset-6" style="margin-top:-25px">
-                        <div class="input-group">
-                            <input class="form-control" id="length" type="number" ng-keyup="recalc()" ng-model="handiLength" ng-init="handiLength=5000">
-                            <span class="input-group-addon">metres</span>
-                        </div>
-                        <input type="submit" class="sr-only">
-                    </form>
+
                 </div>
                 <table class="table" ng-controller="handicapCtrl">
                     <thead>
@@ -67,7 +86,7 @@
                             <td>{{ x.name }}</td>
                             <td>{{ x.category }}</td>
                             <td>{{ x.esttime }}</td>
-                            <td>{{ '+' + x.offset }}</td>
+                            <td>{{ x.offset }}</td>
                         </tr>
                     </tbody>
                 </table>

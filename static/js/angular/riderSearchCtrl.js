@@ -10,22 +10,18 @@ app.controller('riderSearchCtrl', function($scope){
         }
     };
 
-    socket.emit('riderList', function(query){
-        console.log("Request full rider list");
-    });
+    socket.emit('riderList');
 
     // Search riders
     angular.element('#riderNum').keyup(function(e){
         angular.element('#searchNum, #searchName, #searchCat').text("");
         var query = angular.element('#riderNum').val();
         if (query !== "" || query !== null) {
-            console.log(query);
             socket.emit('search', query);
         }
     });
 
     socket.on('search', function(result){
-        console.log(result);
         if (result) {
             $scope.search.id = result.id;
             $scope.search.number = result.number;
@@ -42,12 +38,7 @@ app.controller('riderSearchCtrl', function($scope){
     });
 
     socket.on('riderList', function(riders){
-        // console.log(riders);
         $scope.riders = riders;
         $scope.$apply();
-    });
-
-    socket.on('startRider', function (data) {
-        console.log(data);
     });
 });

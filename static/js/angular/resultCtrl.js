@@ -2,8 +2,8 @@ app.controller('resultCtrl', function($scope){
     $scope.active = {};
     $scope.recent = {};
 
-    socket.emit('recentList');
-    socket.emit('overallList');
+    socket.emit('results');
+    // socket.emit('overallList');
 
     function time (start, end) {
         // Make seconds into minutes and seconds
@@ -49,10 +49,7 @@ app.controller('resultCtrl', function($scope){
             data[i].time = time(data[i].starttime, Math.floor(Date.now()/1000));
         }
 
-        socket.emit('overallList');
-        socket.emit('handicapList');
-
-        $scope.active = elementReduce(data, 5);
+        $scope.active = elementReduce(data, 13);
         $scope.$apply();
     });
 
@@ -65,7 +62,7 @@ app.controller('resultCtrl', function($scope){
             data[i].time = time(data[i].starttime, data[i].endtime);
         }
 
-        $scope.recent = elementReduce(data, 5);
+        $scope.recent = elementReduce(data, 13);
         $scope.$apply();
     });
 

@@ -108,6 +108,7 @@
 									<th>#</th>
 									<th>Name</th>
 									<th>Category</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -115,6 +116,7 @@
 									<td>{{ x.number }}</td>
 									<td>{{ x.name }}</td>
 									<td>{{ x.category_name }}</td>
+									<td><a href="" ng-click="deleteRider( x.rider_id )" class="pull-right"><span class="glyphicon glyphicon-trash"></span></a></td>
 								</tr>
 							</tbody>
 						</table>
@@ -156,12 +158,14 @@
 								<tr>
 									<th>Name</th>
 									<th>Details</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="x in categoryList">
 									<td>{{ x.name }}</td>
 									<td>{{ x.parameters }}</td>
+									<td><a href="" ng-click="deleteCategory( x.category_id )" class="pull-right"><span class="glyphicon glyphicon-trash"></span></a></td>
 								</tr>
 							</tbody>
 						</table>
@@ -201,12 +205,14 @@
 								<tr>
 									<th>Name</th>
 									<th>Length</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="x in trackList">
 									<td>{{ x.name }}</td>
 									<td>{{ x.length }}m</td>
+									<td><a href="" ng-click="deleteTrack( x.id )" class="pull-right"><span class="glyphicon glyphicon-trash"></span></a></td>
 								</tr>
 							</tbody>
 						</table>
