@@ -30,11 +30,15 @@ app.controller('riders', function($scope){
             category_id: $scope.rider.category_id
         };
         socket.emit('newRider', data);
+        $scope.rider.name = "";
+        $scope.rider = {
+            name: "",
+            category_id: ""
+        };
         angular.element('#newRiderButton').click();
     };
 
     $scope.getNumbers = function () {
-        console.log("Get numbers");
         socket.emit('riderList');
     };
 
@@ -57,7 +61,11 @@ app.controller('riders', function($scope){
     });
 
     angular.element("#cancelNewRider").click(function(){
-        angular.element("#newRider").trigger("reset");
+        $scope.rider.name = "";
+        $scope.rider = {
+            name: "",
+            category_id: ""
+        };
         angular.element('#newRiderButton').click();
     });
 
