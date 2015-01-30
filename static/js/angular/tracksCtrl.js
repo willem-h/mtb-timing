@@ -11,6 +11,7 @@ app.controller('tracks', function($scope){
             length: $scope.track.length
         };
         socket.emit('newTrack', data);
+        angular.element('#cancelNewTrack').click();
     };
 
     $scope.deleteTrack = function (id) {
@@ -19,24 +20,6 @@ app.controller('tracks', function($scope){
             socket.emit('deleteTrack', id);
         }
     };
-
-    socket.on('newTrack', function(data){
-        if (data.bool) {
-            jquery('.noti').text(data.name +' was added to Tracks');
-            jquery('#cancelNewTrack').click();
-            setTimeout(function(){
-                jquery('.noti').text('');
-            },2500);
-            $scope.track = {};
-            socket.emit('trackList');
-        } else {
-            jquery('.noti').toggleClass('notiSuccess notiError').text("Something's wrong");
-            setTimeout(function(){
-                jquery('.noti').toggleClass('notiSuccess notiError').text('');
-            },2500);
-        }
-        socket.emit('trackList');
-    });
 
     socket.on('trackList', function(data){
         $scope.trackList = data;

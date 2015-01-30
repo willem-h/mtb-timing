@@ -74,11 +74,7 @@ io.on('connection', function(socket){
             db.query('INSERT INTO tracks SET ?', track, function(err, result){
                 if (err) throw err;
             });
-            socket.emit('newTrack', {bool:true, name:track.name});
-            socket.emit('trackList');
-        } else {
-            socket.emit('newTrack', false);
-            console.log('New track failed: '+ track.name);
+            trackList();
         }
     }
 
@@ -87,9 +83,7 @@ io.on('connection', function(socket){
             db.query('INSERT INTO categories SET ?', category, function(err, result){
                 if (err) throw err;
             });
-            socket.emit('newCategory', {bool:true, name:category.name});
-        } else {
-            socket.emit('newCategory', false);
+            categoryList();
         }
     }
 
@@ -99,9 +93,7 @@ io.on('connection', function(socket){
             db.query('INSERT INTO riders SET ?', rider, function(err, result){
                 if (err) throw err;
             });
-            socket.emit('newRider', {bool:true, name:rider.name});
-        } else {
-            socket.emit('newRider', false);
+            riderList();
         }
     }
 
@@ -111,7 +103,7 @@ io.on('connection', function(socket){
             if (err) {
                 throw err;
             } else {
-                socket.emit('trackList', rows);
+                io.emit('trackList', rows);
             }
         });
     }
@@ -122,7 +114,7 @@ io.on('connection', function(socket){
             if (err) {
                 throw err;
             } else {
-                socket.emit('categoryList', rows);
+                io.emit('categoryList', rows);
             }
         });
     }
@@ -133,7 +125,7 @@ io.on('connection', function(socket){
             if (err) {
                 throw err;
             } else {
-                socket.emit('riderList', rows);
+                io.emit('riderList', rows);
             }
         });
     }

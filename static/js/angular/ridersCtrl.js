@@ -30,22 +30,7 @@ app.controller('riders', function($scope){
             category_id: $scope.rider.category_id
         };
         socket.emit('newRider', data);
-
-        socket.on('newRider', function(data){
-            if (data.name) {
-                angular.element(".noti").text(data.name +" added successfully");
-                angular.element(".noti").addClass("notiSuccess");
-                setTimeout(function(){
-                    angular.element(".noti").text("");
-                },3000);
-                angular.element("#newName, #newNum, #newCat").val('');
-            } else if (!data.name) {
-                angular.element(".noti").text("There's a problem databasing");
-                angular.element(".noti").addClass("notiFail");
-            }
-            socket.emit('riderList');
-        });
-        angular.element('#newRiderBox, #riderList').toggleClass('hidden');
+        angular.element('#newRiderButton').click();
     };
 
     $scope.getNumbers = function () {
