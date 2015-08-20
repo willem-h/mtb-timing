@@ -284,7 +284,7 @@ io.on('connection', function(socket){
         overallList();
         recentList();
         activeList();
-    })
+    });
 });
 
 setInterval(function(){
